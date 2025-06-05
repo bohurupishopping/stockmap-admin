@@ -28,11 +28,11 @@ class AuthRepository {
 
       final userProfile = UserProfile.fromJson(profileData);
 
-      // Check if user has 'mr' role
-      if (userProfile.role != UserRole.mr) {
-        // Sign out the user if they don't have mr role
+      // Check if user has 'admin' role
+      if (userProfile.role != UserRole.admin) {
+        // Sign out the user if they don't have admin role
         await _supabase.auth.signOut();
-        throw Exception('Access denied. Only MR role users can access this app.');
+        throw Exception('Access denied. Only admin users can access this app.');
       }
 
       return userProfile;
@@ -66,8 +66,8 @@ class AuthRepository {
 
       final userProfile = UserProfile.fromJson(profileData);
 
-      // Check if user still has 'mr' role
-      if (userProfile.role != UserRole.mr) {
+      // Check if user still has 'admin' role
+      if (userProfile.role != UserRole.admin) {
         await _supabase.auth.signOut();
         return null;
       }

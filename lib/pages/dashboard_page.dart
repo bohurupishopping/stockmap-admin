@@ -180,7 +180,7 @@ class _DashboardContent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Text(
-                    'MR Dashboard',
+                    'Admin Dashboard',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white,

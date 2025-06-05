@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 8),
         const Text(
-          'Sign in to access your MR dashboard',
+          'Sign in to access your Admin dashboard',
           style: TextStyle(
             fontSize: 16,
             color: Color(0xFF94A3B8),
