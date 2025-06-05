@@ -10,6 +10,7 @@ import '../widgets/purchase_table_row.dart';
 import '../widgets/purchase_table_header.dart';
 import '../widgets/purchase_details_dialog.dart';
 import '../widgets/loading_overlay.dart';
+import '../widgets/footer_nav_bar.dart';
 
 class PurchasePage extends StatefulWidget {
   const PurchasePage({super.key});
@@ -233,6 +234,7 @@ class _PurchasePageState extends State<PurchasePage> {
           ],
         ),
       ),
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/purchase'),
     );
   }
   

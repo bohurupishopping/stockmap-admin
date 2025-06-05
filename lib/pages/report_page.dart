@@ -5,6 +5,7 @@ import '../services/product_service.dart';
 
 import '../widgets/loading_overlay.dart';
 import '../widgets/report_widgets.dart';
+import '../widgets/footer_nav_bar.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -216,7 +217,7 @@ class _ReportPageState extends State<ReportPage> {
           ],
         ),
       ),
-
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/report'),
     );
   }
 
@@ -370,7 +371,7 @@ class _ReportPageState extends State<ReportPage> {
         color: const Color(0xFF6366f1),
         onRefresh: _loadReportData,
         child: ListView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           padding: const EdgeInsets.only(bottom: 16),
           itemCount: _filteredProducts.length,

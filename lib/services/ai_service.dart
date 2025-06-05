@@ -357,7 +357,7 @@ Keep the response concise, practical, and relevant to stock management.''';
   }
 
   static Future<String> _callOpenAI(String prompt, {int maxTokens = 500}) async {
-    developer.log('🤖 AI Service: Calling OpenAI API with ${maxTokens} max tokens', name: 'AiService');
+    developer.log('🤖 AI Service: Calling OpenAI API with $maxTokens max tokens', name: 'AiService');
     
     if (_openAiApiKey == 'YOUR_OPENAI_API_KEY') {
       developer.log('⚠️ AI Service: Using mock response (API key not configured)', name: 'AiService');

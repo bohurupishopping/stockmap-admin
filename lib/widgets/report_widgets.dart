@@ -610,34 +610,6 @@ class StockReportCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // Additional info row
-          Row(
-            children: [
-              Expanded(
-                child: _buildInfoChip(
-                  'Category',
-                  product.categoryName ?? 'N/A',
-                  Icons.category_rounded,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _buildInfoChip(
-                  'Cost/Strip',
-                  '₹${product.baseCostPerStrip.toStringAsFixed(2)}',
-                  Icons.currency_rupee_rounded,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _buildInfoChip(
-                  'Min Stock',
-                  minStock.toString(),
-                  Icons.trending_down_rounded,
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );
@@ -682,52 +654,4 @@ class StockReportCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoChip(
-    String label,
-    String value,
-    IconData icon,
-  ) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Colors.grey.shade200,
-          width: 1,
-        ),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            size: 14,
-            color: const Color(0xFF6366f1),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF64748b),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 1),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1e293b),
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
 }

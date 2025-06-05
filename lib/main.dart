@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'config/supabase_config.dart';
 import 'bloc/auth/auth_bloc.dart';
-import 'bloc/auth/auth_event.dart';
 import 'repositories/auth_repository.dart';
 import 'router/app_router.dart';
 
@@ -35,7 +34,7 @@ class MainApp extends StatelessWidget {
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
-            )..add(const AuthEvent.checkAuthStatus()),
+            ),
           ),
         ],
         child: Builder(

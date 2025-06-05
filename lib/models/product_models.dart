@@ -138,6 +138,7 @@ class ProductFilters {
   bool? isActive;
   double? minCost;
   double? maxCost;
+  String? stockStatus;
 
   ProductFilters({
     this.searchQuery,
@@ -148,6 +149,7 @@ class ProductFilters {
     this.isActive,
     this.minCost,
     this.maxCost,
+    this.stockStatus,
   });
 
   bool get hasActiveFilters {
@@ -158,7 +160,8 @@ class ProductFilters {
         manufacturer?.isNotEmpty == true ||
         isActive != null ||
         minCost != null ||
-        maxCost != null;
+        maxCost != null ||
+        stockStatus?.isNotEmpty == true;
   }
 
   void clear() {
@@ -170,6 +173,7 @@ class ProductFilters {
     isActive = null;
     minCost = null;
     maxCost = null;
+    stockStatus = null;
   }
 }
 

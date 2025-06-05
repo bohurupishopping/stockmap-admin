@@ -5,6 +5,7 @@ import '../bloc/auth/auth_bloc.dart';
 import '../bloc/auth/auth_event.dart';
 import '../bloc/auth/auth_state.dart';
 import '../models/user_profile.dart';
+import '../widgets/footer_nav_bar.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -12,7 +13,7 @@ class DashboardPage extends StatelessWidget {
   final List<NavItem> navItems = const [
     NavItem(
       title: 'Stock',
-      description: 'Manage inventory',
+      description: 'View stocks',
       icon: Icons.inventory_2,
       route: '/stock',
       color: Color(0xFF818cf8),
@@ -28,7 +29,7 @@ class DashboardPage extends StatelessWidget {
     ),
     NavItem(
       title: 'Sale',
-      description: 'Manage sales',
+      description: 'View sales',
       icon: Icons.people,
       route: '/sale',
       color: Color(0xFF34d399),
@@ -36,20 +37,20 @@ class DashboardPage extends StatelessWidget {
     ),
     NavItem(
       title: 'Purchase',
-      description: 'Manage purchases',
+      description: 'View purchases',
       icon: Icons.shopping_cart,
       route: '/purchase',
       color: Color(0xFFf472b6),
       gradientColors: [Color(0xFFf472b6), Color(0xFFec4899)],
     ),
     NavItem(
-      title: 'AI Assistant',
+      title: 'AI',
       description: 'Smart analytics',
       icon: Icons.psychology,
       route: '/ai',
       color: Color(0xFF667eea),
       gradientColors: [Color(0xFF667eea), Color(0xFF764ba2)],
-    ),  
+    ),
   ];
 
   @override
@@ -94,6 +95,7 @@ class _DashboardContent extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/dashboard'),
     );
   }
 
@@ -149,9 +151,7 @@ class _DashboardContent extends StatelessWidget {
             child: IconButton(
               icon: const Icon(Icons.logout, color: Colors.white),
               onPressed: () {
-                context.read<AuthBloc>().add(
-                  const AuthEvent.logoutRequested(),
-                );
+                context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
               },
             ),
           ),
@@ -182,7 +182,10 @@ class _DashboardContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
@@ -220,7 +223,7 @@ class _DashboardContent extends StatelessWidget {
 
   Widget _buildNavGrid(BuildContext context) {
     return Wrap(
-      spacing: 24,
+      spacing: 16,
       runSpacing: 24,
       children: navItems.map((item) => _buildNavItem(context, item)).toList(),
     );
@@ -228,7 +231,7 @@ class _DashboardContent extends StatelessWidget {
 
   Widget _buildNavItem(BuildContext context, NavItem item) {
     return Container(
-      width: (MediaQuery.of(context).size.width - 64) / 2,
+      width: (MediaQuery.of(context).size.width - 64) / 3,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -250,9 +253,11 @@ class _DashboardContent extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(24),
           onTap: () {
-            if (item.route == '/stock' || item.route == '/report' || 
-                item.route == '/sale' || item.route == '/purchase'
-                || item.route == '/ai') {
+            if (item.route == '/stock' ||
+                item.route == '/report' ||
+                item.route == '/sale' ||
+                item.route == '/purchase' ||
+                item.route == '/ai') {
               context.go(item.route);
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -275,11 +280,7 @@ class _DashboardContent extends StatelessWidget {
                     color: item.color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Icon(
-                    item.icon,
-                    size: 26,
-                    color: item.color,
-                  ),
+                  child: Icon(item.icon, size: 26, color: item.color),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -333,11 +334,7 @@ class _LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
 
@@ -355,16 +352,9 @@ class _ErrorWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Colors.red,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-              Text(
-                'Error',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
+              Text('Error', style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 8),
               SelectableText(
                 message,
@@ -374,7 +364,9 @@ class _ErrorWidget extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEvent.checkAuthStatus());
+                  context.read<AuthBloc>().add(
+                    const AuthEvent.checkAuthStatus(),
+                  );
                 },
                 child: const Text('Retry'),
               ),

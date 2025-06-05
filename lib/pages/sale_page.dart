@@ -8,6 +8,7 @@ import '../widgets/sale_table_header.dart';
 import '../widgets/sale_table_row.dart';
 import '../widgets/sale_details_dialog.dart';
 import '../widgets/loading_overlay.dart';
+import '../widgets/footer_nav_bar.dart';
 
 class SalePage extends StatefulWidget {
   const SalePage({super.key});
@@ -227,6 +228,7 @@ class _SalePageState extends State<SalePage> {
           ],
         ),
       ),
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/sale'),
     );
   }
   
@@ -337,7 +339,7 @@ class _SalePageState extends State<SalePage> {
               ),
           ],
         ),
-      ),
+      )
     );
   }
   

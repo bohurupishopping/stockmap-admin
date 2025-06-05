@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../bloc/auth/auth_bloc.dart';
 import '../bloc/auth/auth_state.dart';
+import '../pages/splash_page.dart';
 import '../pages/login_page.dart';
 import '../pages/dashboard_page.dart';
 import '../pages/stock_page.dart';
@@ -14,28 +15,42 @@ import '../pages/ai_page.dart';
 class AppRouter {
   static GoRouter createRouter(AuthBloc authBloc) {
     return GoRouter(
-      initialLocation: '/login',
+      initialLocation: '/splash',
       refreshListenable: GoRouterRefreshStream(authBloc.stream),
       redirect: (context, state) {
         final authState = authBloc.state;
-        final isLoginRoute = state.matchedLocation == '/login';
+        final currentLocation = state.matchedLocation;
         
-        if (authState is AuthInitial) {
-          return '/login';
-        } else if (authState is AuthLoading) {
-          return null; // Stay on current route while loading
-        } else if (authState is AuthAuthenticated) {
-          return isLoginRoute ? '/dashboard' : null;
-        } else if (authState is AuthUnauthenticated) {
-          return isLoginRoute ? null : '/login';
-        } else if (authState is AuthError) {
-          return isLoginRoute ? null : '/login';
-        } else if (authState is AuthAccessDenied) {
-          return '/login';
+        // Allow splash screen to handle initial auth check
+        if (currentLocation == '/splash') {
+          return null;
         }
-        return '/login';
+        
+        // Redirect logic for other routes
+        if (authState is AuthInitial || authState is AuthLoading) {
+          return '/splash';
+        } else if (authState is AuthAuthenticated) {
+          if (currentLocation == '/login') {
+            return '/dashboard';
+          }
+          return null; // Allow access to authenticated routes
+        } else if (authState is AuthUnauthenticated || 
+                   authState is AuthError || 
+                   authState is AuthAccessDenied) {
+          if (currentLocation != '/login') {
+            return '/login';
+          }
+          return null;
+        }
+        
+        return '/splash';
       },
       routes: [
+        GoRoute(
+          path: '/splash',
+          name: 'splash',
+          builder: (context, state) => const SplashPage(),
+        ),
         GoRoute(
           path: '/login',
           name: 'login',

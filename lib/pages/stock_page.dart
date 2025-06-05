@@ -4,6 +4,7 @@ import '../models/product_models.dart';
 import '../services/product_service.dart';
 import '../widgets/product_card.dart';
 import '../widgets/product_details_dialog.dart';
+import '../widgets/footer_nav_bar.dart';
 
 class StockPage extends StatefulWidget {
   const StockPage({super.key});
@@ -208,6 +209,7 @@ class _StockPageState extends State<StockPage> {
           ],
         ),
       ),
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/stock'),
     );
   }
 
@@ -530,117 +532,152 @@ class _StockPageState extends State<StockPage> {
   }
 
   Widget _buildFilterDialog() {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        children: [
-          // Handle
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          // Header
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: MediaQuery.of(context).size.height * 0.8,
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
                   'Filter Products',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _filters.clear();
-                    });
-                  },
-                  child: const Text('Clear All'),
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
                 ),
               ],
             ),
-          ),
-          const Divider(height: 1),
-          // Filter Options
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Category Filter
-                  _buildFilterSection(
-                    'Category',
-                    DropdownButtonFormField<String>(
+            const SizedBox(height: 24),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Category Filter
+                    const Text(
+                      'Category',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String?>(
                       value: _filters.categoryId,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,
                         ),
                       ),
-                      hint: const Text('Select Category'),
                       items: [
-                        const DropdownMenuItem(
+                        const DropdownMenuItem<String?>(
                           value: null,
                           child: Text('All Categories'),
                         ),
-                        ..._categories.map(
-                          (category) => DropdownMenuItem(
-                            value: category.id,
-                            child: Text(category.categoryName),
-                          ),
-                        ),
+                        ..._categories.map((category) => DropdownMenuItem<String?>(
+                          value: category.id,
+                          child: Text(category.categoryName),
+                        )),
                       ],
                       onChanged: (value) {
                         setState(() {
                           _filters.categoryId = value;
                           _filters.subCategoryId = null; // Reset subcategory
                         });
-                        _loadSubCategories(value);
+                        if (value != null) {
+                          _loadSubCategories(value);
+                        } else {
+                          setState(() {
+                            _subCategories.clear();
+                          });
+                        }
                       },
                     ),
-                  ),
-                  // Formulation Filter
-                  _buildFilterSection(
-                    'Formulation',
-                    DropdownButtonFormField<String>(
-                      value: _filters.formulationId,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
+                    const SizedBox(height: 16),
+
+                    // Sub Category Filter
+                    const Text(
+                      'Sub Category',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String?>(
+                      value: _filters.subCategoryId,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,
                         ),
                       ),
-                      hint: const Text('Select Formulation'),
                       items: [
-                        const DropdownMenuItem(
+                        const DropdownMenuItem<String?>(
+                          value: null,
+                          child: Text('All Sub Categories'),
+                        ),
+                        ..._subCategories.map((subCategory) => DropdownMenuItem<String?>(
+                          value: subCategory.id,
+                          child: Text(subCategory.subCategoryName),
+                        )),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _filters.subCategoryId = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Formulation Filter
+                    const Text(
+                      'Formulation',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String?>(
+                      value: _filters.formulationId,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                      ),
+                      items: [
+                        const DropdownMenuItem<String?>(
                           value: null,
                           child: Text('All Formulations'),
                         ),
-                        ..._formulations.map(
-                          (formulation) => DropdownMenuItem(
-                            value: formulation.id,
-                            child: Text(formulation.formulationName),
-                          ),
-                        ),
+                        ..._formulations.map((formulation) => DropdownMenuItem<String?>(
+                          value: formulation.id,
+                          child: Text(formulation.formulationName),
+                        )),
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -648,31 +685,37 @@ class _StockPageState extends State<StockPage> {
                         });
                       },
                     ),
-                  ),
-                  // Manufacturer Filter
-                  _buildFilterSection(
-                    'Manufacturer',
-                    DropdownButtonFormField<String>(
+                    const SizedBox(height: 16),
+
+                    // Manufacturer Filter
+                    const Text(
+                      'Manufacturer',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String?>(
                       value: _filters.manufacturer,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,
                         ),
                       ),
-                      hint: const Text('Select Manufacturer'),
                       items: [
-                        const DropdownMenuItem(
+                        const DropdownMenuItem<String?>(
                           value: null,
                           child: Text('All Manufacturers'),
                         ),
-                        ..._manufacturers.map(
-                          (manufacturer) => DropdownMenuItem(
-                            value: manufacturer,
-                            child: Text(manufacturer),
-                          ),
-                        ),
+                        ..._manufacturers.map((manufacturer) => DropdownMenuItem<String?>(
+                          value: manufacturer,
+                          child: Text(manufacturer),
+                        )),
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -680,74 +723,90 @@ class _StockPageState extends State<StockPage> {
                         });
                       },
                     ),
-                  ),
-                  // Status Filter
-                  _buildFilterSection(
-                    'Status',
-                    DropdownButtonFormField<bool?>(
-                      value: _filters.isActive,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
+                    const SizedBox(height: 16),
+
+                    // Stock Status Filter
+                    const Text(
+                      'Stock Status',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String?>(
+                      value: _filters.stockStatus,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,
                         ),
                       ),
-                      hint: const Text('Select Status'),
                       items: const [
-                        DropdownMenuItem(
+                        DropdownMenuItem<String?>(
                           value: null,
-                          child: Text('All Status'),
+                          child: Text('All Stock Status'),
                         ),
-                        DropdownMenuItem(
-                          value: true,
-                          child: Text('Active'),
+                        DropdownMenuItem<String?>(
+                          value: 'in_stock',
+                          child: Text('In Stock'),
                         ),
-                        DropdownMenuItem(
-                          value: false,
-                          child: Text('Inactive'),
+                        DropdownMenuItem<String?>(
+                          value: 'low_stock',
+                          child: Text('Low Stock'),
+                        ),
+                        DropdownMenuItem<String?>(
+                          value: 'out_of_stock',
+                          child: Text('Out of Stock'),
                         ),
                       ],
                       onChanged: (value) {
                         setState(() {
-                          _filters.isActive = value;
+                          _filters.stockStatus = value;
                         });
                       },
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Apply Button
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _loadProducts(reset: true);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4F46E5),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  'Apply Filters',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        _filters.clear();
+                        _searchController.clear();
+                      });
+                      _loadProducts(reset: true);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Clear'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _loadProducts(reset: true);
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF818cf8),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Apply'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -838,23 +897,6 @@ class _StockPageState extends State<StockPage> {
     }).toList();
   }
 
-  Widget _buildFilterSection(String title, Widget child) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        child,
-        const SizedBox(height: 16),
-      ],
-    );
-  }
 
   Future<void> _loadSubCategories(String? categoryId) async {
     if (categoryId == null) {
