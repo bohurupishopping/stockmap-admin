@@ -1,5 +1,5 @@
-name: stockmap_mr
-description: "A new Flutter project."
+name: stockmap_admin
+description: "a comprehensive medical stock management system"
 publish_to: 'none'
 version: 0.1.0
 

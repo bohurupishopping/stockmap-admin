@@ -28,7 +28,7 @@ class DashboardPage extends StatelessWidget {
     ),
     NavItem(
       title: 'Sale',
-      description: 'Manage customers',
+      description: 'Manage sales',
       icon: Icons.people,
       route: '/sale',
       color: Color(0xFF34d399),
@@ -36,7 +36,7 @@ class DashboardPage extends StatelessWidget {
     ),
     NavItem(
       title: 'Purchase',
-      description: 'Manage suppliers',
+      description: 'Manage purchases',
       icon: Icons.shopping_cart,
       route: '/purchase',
       color: Color(0xFFf472b6),

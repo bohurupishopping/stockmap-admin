@@ -218,28 +218,7 @@ class ProductDetailsDialog extends StatelessWidget {
           
           const SizedBox(width: 12),
           
-          // Close Button
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: const Color(0xFFE2E8F0), // Slate 200
-                width: 1,
-              ),
-            ),
-            child: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(
-                Icons.close_rounded,
-                size: 20,
-              ),
-              style: IconButton.styleFrom(
-                foregroundColor: const Color(0xFF64748B), // Slate 500
-                minimumSize: const Size(40, 40),
-              ),
-            ),
-          ),
+          
         ],
       ),
     );
@@ -393,39 +372,7 @@ class ProductDetailsDialog extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: () {
-                // Add edit functionality here
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text('Edit functionality coming soon!'),
-                    behavior: SnackBarBehavior.floating,
-                    backgroundColor: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.edit_rounded,
-                size: 18,
-              ),
-              label: const Text('Edit Product'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ),
+          
         ],
       ),
     );

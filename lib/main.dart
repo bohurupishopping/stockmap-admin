@@ -44,7 +44,7 @@ class MainApp extends StatelessWidget {
             final router = AppRouter.createRouter(authBloc);
             
             return MaterialApp.router(
-              title: 'StockMap MR',
+              title: 'StockMap Admin',
               theme: ThemeData(
                 primarySwatch: Colors.blue,
                 useMaterial3: true,
