@@ -42,6 +42,14 @@ class DashboardPage extends StatelessWidget {
       color: Color(0xFFf472b6),
       gradientColors: [Color(0xFFf472b6), Color(0xFFec4899)],
     ),
+    NavItem(
+      title: 'AI Assistant',
+      description: 'Smart analytics',
+      icon: Icons.psychology,
+      route: '/ai',
+      color: Color(0xFF667eea),
+      gradientColors: [Color(0xFF667eea), Color(0xFF764ba2)],
+    ),  
   ];
 
   @override
@@ -243,7 +251,8 @@ class _DashboardContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           onTap: () {
             if (item.route == '/stock' || item.route == '/report' || 
-                item.route == '/sale' || item.route == '/purchase') {
+                item.route == '/sale' || item.route == '/purchase'
+                || item.route == '/ai') {
               context.go(item.route);
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
