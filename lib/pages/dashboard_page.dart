@@ -43,14 +43,7 @@ class DashboardPage extends StatelessWidget {
       color: Color(0xFFf472b6),
       gradientColors: [Color(0xFFf472b6), Color(0xFFec4899)],
     ),
-    NavItem(
-      title: 'AI',
-      description: 'Smart analytics',
-      icon: Icons.psychology,
-      route: '/ai',
-      color: Color(0xFF667eea),
-      gradientColors: [Color(0xFF667eea), Color(0xFF764ba2)],
-    ),
+    
   ];
 
   @override
@@ -223,7 +216,7 @@ class _DashboardContent extends StatelessWidget {
 
   Widget _buildNavGrid(BuildContext context) {
     return Wrap(
-      spacing: 16,
+      spacing: 24,
       runSpacing: 24,
       children: navItems.map((item) => _buildNavItem(context, item)).toList(),
     );
@@ -231,7 +224,7 @@ class _DashboardContent extends StatelessWidget {
 
   Widget _buildNavItem(BuildContext context, NavItem item) {
     return Container(
-      width: (MediaQuery.of(context).size.width - 64) / 3,
+      width: (MediaQuery.of(context).size.width - 64) / 2,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
