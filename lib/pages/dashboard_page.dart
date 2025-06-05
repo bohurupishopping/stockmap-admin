@@ -36,8 +36,8 @@ class DashboardPage extends StatelessWidget {
     ),
     NavItem(
       title: 'Purchase',
-      description: 'App settings',
-      icon: Icons.settings,
+      description: 'Manage suppliers',
+      icon: Icons.shopping_cart,
       route: '/purchase',
       color: Color(0xFFf472b6),
       gradientColors: [Color(0xFFf472b6), Color(0xFFec4899)],
@@ -242,7 +242,8 @@ class _DashboardContent extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(24),
           onTap: () {
-            if (item.route == '/stock' || item.route == '/report') {
+            if (item.route == '/stock' || item.route == '/report' || 
+                item.route == '/sale' || item.route == '/purchase') {
               context.go(item.route);
             } else {
               ScaffoldMessenger.of(context).showSnackBar(

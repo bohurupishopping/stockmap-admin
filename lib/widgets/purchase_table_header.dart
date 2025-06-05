@@ -54,7 +54,7 @@ class PurchaseTableHeader extends StatelessWidget {
           Expanded(
             flex: 2,
             child: _buildSortableHeader(
-              'Supplier',
+              'Batch',
               'supplier_id',
               Icons.business,
             ),

@@ -8,6 +8,7 @@ import '../pages/dashboard_page.dart';
 import '../pages/stock_page.dart';
 import '../pages/report_page.dart';
 import '../pages/purchase_page.dart';
+import '../pages/sale_page.dart';
 
 class AppRouter {
   static GoRouter createRouter(AuthBloc authBloc) {
@@ -58,6 +59,11 @@ class AppRouter {
           path: '/purchase',
           name: 'purchase',
           builder: (context, state) => const PurchasePage(),
+        ),
+        GoRoute(
+          path: '/sale',
+          name: 'sale',
+          builder: (context, state) => const SalePage(),
         ),
       ],
     );

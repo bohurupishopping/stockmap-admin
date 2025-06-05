@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/purchase_models.dart';
+import '../models/sale_models.dart';
 
-class PurchaseDetailsDialog extends StatelessWidget {
-  final PurchaseTransaction transaction;
+class SaleDetailsDialog extends StatelessWidget {
+  final SaleTransaction transaction;
   final NumberFormat currencyFormat;
   final DateFormat dateFormat;
 
-  const PurchaseDetailsDialog({
+  const SaleDetailsDialog({
     super.key,
     required this.transaction,
     required this.currencyFormat,
@@ -24,7 +24,7 @@ class PurchaseDetailsDialog extends StatelessWidget {
     
     // Modern color scheme
     const primaryColor = Color(0xFF1E293B); // Slate 800
-    const accentColor = Color(0xFF0F766E); // Teal 700
+    const accentColor = Color(0xFF7C3AED); // Violet 600
     const surfaceColor = Color(0xFFF8FAFC); // Slate 50
     const borderColor = Color(0xFFE2E8F0); // Slate 200
     const successColor = Color(0xFF059669); // Emerald 600
@@ -66,28 +66,9 @@ class PurchaseDetailsDialog extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildPurchaseInfo(theme, primaryColor, accentColor),
+                    _buildSaleInfo(theme, primaryColor, accentColor),
                     const SizedBox(height: 20),
                     _buildTransactionDetails(theme, primaryColor, isExpiringSoon),
-                    
-                    // Additional Information Section
-                     if (transaction.referenceDocumentId != null || transaction.notes != null) ...[
-                       const SizedBox(height: 20),
-                      Text(
-                        'Additional Information',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: primaryColor,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      if (transaction.referenceDocumentId != null)
-                        _buildInfoRow('Reference Document', transaction.referenceDocumentId!, Icons.description_outlined, theme, primaryColor, accentColor),
-                      if (transaction.notes != null)
-                        _buildInfoRow('Notes', transaction.notes!, Icons.note_outlined, theme, primaryColor, accentColor),
-                    ],
-                    
                     const SizedBox(height: 12),
                   ],
                 ),
@@ -120,7 +101,7 @@ class PurchaseDetailsDialog extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Purchase Icon
+          // Sale Icon
           Container(
             width: 48,
             height: 48,
@@ -133,7 +114,7 @@ class PurchaseDetailsDialog extends StatelessWidget {
               ),
             ),
             child: Icon(
-              Icons.shopping_bag_outlined,
+              Icons.point_of_sale_outlined,
               color: accentColor,
               size: 20,
             ),
@@ -141,30 +122,30 @@ class PurchaseDetailsDialog extends StatelessWidget {
           
           const SizedBox(width: 12),
           
-          // Purchase Title Info
+          // Sale Title Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Purchase ID Badge
+                // Sale ID Badge
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFECFDF5), // Emerald 50
+                    color: const Color(0xFFF3E8FF), // Violet 50
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: const Color(0xFFA7F3D0), // Emerald 200
+                      color: const Color(0xFFDDD6FE), // Violet 200
                       width: 1,
                     ),
                   ),
                   child: Text(
-                    'Purchase #${transaction.purchaseId}',
+                    'Sale #${transaction.saleId}',
                     style: TextStyle(
-                      color: successColor,
-                      fontSize: 5,
+                      color: accentColor,
+                      fontSize: 6,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -267,12 +248,12 @@ class PurchaseDetailsDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildPurchaseInfo(ThemeData theme, Color primaryColor, Color accentColor) {
+  Widget _buildSaleInfo(ThemeData theme, Color primaryColor, Color accentColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Purchase Information',
+          'Sale Information',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -280,11 +261,9 @@ class PurchaseDetailsDialog extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        _buildInfoRow('Purchase Date', dateFormat.format(transaction.purchaseDate), Icons.calendar_today_outlined, theme, primaryColor, accentColor),
+        _buildInfoRow('Sale Date', dateFormat.format(transaction.saleDate), Icons.calendar_today_outlined, theme, primaryColor, accentColor),
         _buildInfoRow('Quantity', '${transaction.quantityStrips} strips', Icons.inventory_2_outlined, theme, primaryColor, accentColor),
-        _buildInfoRow('Cost per Strip', currencyFormat.format(transaction.costPerStrip), Icons.attach_money_outlined, theme, primaryColor, accentColor),
-        if (transaction.supplierName != null)
-          _buildInfoRow('Supplier', transaction.supplierName!, Icons.business_outlined, theme, primaryColor, accentColor),
+        _buildInfoRow('Price per Strip', currencyFormat.format(transaction.costPerStrip), Icons.attach_money_outlined, theme, primaryColor, accentColor),
       ],
     );
   }
@@ -487,7 +466,7 @@ class PurchaseDetailsDialog extends StatelessWidget {
             child: Icon(
               icon,
               size: 16,
-              color: isWarning ? const Color(0xFFEA580C) : const Color(0xFF0F766E), // Orange 600 or Teal 700
+              color: isWarning ? const Color(0xFFEA580C) : const Color(0xFF7C3AED), // Orange 600 or Violet 600
             ),
           ),
           const SizedBox(height: 6),

@@ -1,16 +1,14 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/purchase_models.dart';
+import '../models/sale_models.dart';
 
-class PurchaseTableRow extends StatelessWidget {
-  final PurchaseTransaction transaction;
+class SaleTableRow extends StatelessWidget {
+  final SaleTransaction transaction;
   final NumberFormat currencyFormat;
   final DateFormat dateFormat;
   final VoidCallback? onTap;
 
-  const PurchaseTableRow({
+  const SaleTableRow({
     super.key,
     required this.transaction,
     required this.currencyFormat,
@@ -96,16 +94,16 @@ class PurchaseTableRow extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF3B82F6).withOpacity(0.1),
+                          color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           transaction.batchNumber,
                           style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
                             color: Color(0xFF3B82F6),
-                            letterSpacing: 0.2,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.3,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -132,7 +130,7 @@ class PurchaseTableRow extends StatelessWidget {
                           const Text(
                             'strips',
                             style: TextStyle(
-                              fontSize: 7,
+                              fontSize: 11,
                               color: Color(0xFF9CA3AF),
                             ),
                           ),
@@ -160,7 +158,7 @@ class PurchaseTableRow extends StatelessWidget {
                           const SizedBox(width: 4),
                           Flexible(
                             child: Text(
-                              dateFormat.format(transaction.purchaseDate),
+                              dateFormat.format(transaction.saleDate),
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
@@ -231,6 +229,8 @@ class PurchaseTableRow extends StatelessWidget {
                     ],
                   ),
                 ),
+                
+
               ],
             ),
           ),
@@ -238,4 +238,6 @@ class PurchaseTableRow extends StatelessWidget {
       ),
     );
   }
+
+
 }
