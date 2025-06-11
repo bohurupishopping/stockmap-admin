@@ -1,6 +1,6 @@
 {
-    "name": "stockmap_mr",
-    "short_name": "stockmap_mr",
+    "name": "stockmap_admin",
+    "short_name": "stockmap_admin",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",

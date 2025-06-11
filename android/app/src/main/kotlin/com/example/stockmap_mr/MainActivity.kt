@@ -1,4 +1,4 @@
-package com.example.stockmap_mr
+package com.example.stockmap_admin
 
 import io.flutter.embedding.android.FlutterActivity
 
