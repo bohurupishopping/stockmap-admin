@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/sale_models.dart';
+import '../../models/sale_models.dart';
 
 class SaleDetailsDialog extends StatelessWidget {
   final SaleTransaction transaction;
@@ -421,7 +421,7 @@ class SaleDetailsDialog extends StatelessWidget {
             child: Text(
               label,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Color(0xFF64748B), // Slate 500
               ),
@@ -432,7 +432,7 @@ class SaleDetailsDialog extends StatelessWidget {
             child: Text(
               value,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: primaryColor,
               ),

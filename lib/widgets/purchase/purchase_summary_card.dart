@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/purchase_models.dart';
+import '../../models/purchase_models.dart';
 
 class PurchaseSummaryCard extends StatelessWidget {
   final PurchaseSummary summary;

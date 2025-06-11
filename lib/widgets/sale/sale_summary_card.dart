@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/sale_models.dart';
+import '../../models/sale_models.dart';
 
 class SaleSummaryCard extends StatelessWidget {
   final SaleSummary summary;

@@ -42,21 +42,33 @@ class FooterNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: Color(0xFFf1f5f9),
+            width: 1,
+          ),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.2),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, -2),
           ),
         ],
       ),
       child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: navItems.map((item) => _buildNavItem(context, item)).toList(),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 12,
+            bottom: 12,
+            left: 8,
+            right: 8,
+          ),
+          child: Row(
+            children: navItems.map((item) => _buildNavItem(context, item)).toList(),
+          ),
         ),
       ),
     );
@@ -66,48 +78,53 @@ class FooterNavBar extends StatelessWidget {
     final isActive = currentRoute == item.route;
     
     return Expanded(
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            if (currentRoute != item.route) {
-              context.go(item.route);
-            }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: isActive 
-                        ? item.color.withValues(alpha: 0.15)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    item.icon,
-                    size: 24,
-                    color: isActive 
-                        ? item.color 
-                        : const Color(0xFF64748b),
+      child: GestureDetector(
+        onTap: () {
+          if (currentRoute != item.route) {
+            context.go(item.route);
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: isActive ? item.color.withOpacity(0.1) : Colors.white,
+                  border: Border.all(
+                    color: isActive
+                        ? item.color
+                        : const Color(0xFFf1f5f9),
+                    width: 2,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  item.title,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                    color: isActive 
-                        ? item.color 
-                        : const Color(0xFF64748b),
-                  ),
+                child: Icon(
+                  item.icon,
+                  size: 24,
+                  color: isActive
+                      ? item.color
+                      : const Color(0xFF94a3b8),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 4),
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isActive
+                      ? item.color
+                      : const Color(0xFF94a3b8),
+                  fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+                  letterSpacing: 0.5,
+                ),
+                child: Text(item.title),
+              ),
+            ],
           ),
         ),
       ),

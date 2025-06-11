@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/sale_service.dart';
 import '../models/sale_models.dart';
-import '../widgets/sale_summary_card.dart';
-import '../widgets/sale_filter_widget.dart';
-import '../widgets/sale_table_header.dart';
-import '../widgets/sale_table_row.dart';
-import '../widgets/sale_details_dialog.dart';
+import '../widgets/sale/sale_summary_card.dart';
+import '../widgets/sale/sale_filter_widget.dart';
+import '../widgets/sale/sale_table_header.dart';
+import '../widgets/sale/sale_table_row.dart';
+import '../widgets/sale/sale_details_dialog.dart';
 import '../widgets/loading_overlay.dart';
 import '../widgets/footer_nav_bar.dart';
 

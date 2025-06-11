@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/purchase_models.dart';
 import '../services/purchase_service.dart';
-import '../widgets/purchase_summary_card.dart';
-import '../widgets/purchase_filter_widget.dart';
-import '../widgets/purchase_table_row.dart';
-import '../widgets/purchase_table_header.dart';
-import '../widgets/purchase_details_dialog.dart';
+import '../widgets/purchase/purchase_summary_card.dart';
+import '../widgets/purchase/purchase_filter_widget.dart';
+import '../widgets/purchase/purchase_table_row.dart';
+import '../widgets/purchase/purchase_table_header.dart';
+import '../widgets/purchase/purchase_details_dialog.dart';
 import '../widgets/loading_overlay.dart';
 import '../widgets/footer_nav_bar.dart';
 

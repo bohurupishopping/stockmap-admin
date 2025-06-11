@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/product_models.dart';
 import '../services/product_service.dart';
-import '../widgets/product_card.dart';
-import '../widgets/product_details_dialog.dart';
+import '../widgets/product/product_card.dart';
+import '../widgets/product/product_details_dialog.dart';
 import '../widgets/footer_nav_bar.dart';
 
 class StockPage extends StatefulWidget {

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/purchase_models.dart';
+import '../../models/purchase_models.dart';
 
 class PurchaseDetailsDialog extends StatelessWidget {
   final PurchaseTransaction transaction;
@@ -279,7 +279,7 @@ class PurchaseDetailsDialog extends StatelessWidget {
             color: primaryColor,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
         _buildInfoRow('Purchase Date', dateFormat.format(transaction.purchaseDate), Icons.calendar_today_outlined, theme, primaryColor, accentColor),
         _buildInfoRow('Quantity', '${transaction.quantityStrips} strips', Icons.inventory_2_outlined, theme, primaryColor, accentColor),
         _buildInfoRow('Cost per Strip', currencyFormat.format(transaction.costPerStrip), Icons.attach_money_outlined, theme, primaryColor, accentColor),
@@ -301,7 +301,7 @@ class PurchaseDetailsDialog extends StatelessWidget {
             color: primaryColor,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
         Row(
           children: [
             Expanded(
@@ -442,7 +442,7 @@ class PurchaseDetailsDialog extends StatelessWidget {
             child: Text(
               label,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Color(0xFF64748B), // Slate 500
               ),
@@ -453,7 +453,7 @@ class PurchaseDetailsDialog extends StatelessWidget {
             child: Text(
               value,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: primaryColor,
               ),
