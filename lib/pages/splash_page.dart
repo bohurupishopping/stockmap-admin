@@ -14,38 +14,17 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage>
-    with TickerProviderStateMixin {
-  late AnimationController _fadeController;
-  late AnimationController _scaleController;
-  late AnimationController _slideController;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-  late Animation<Offset> _slideAnimation;
+class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fadeAnimation;
+  late final Animation<double> _scaleAnimation;
+  late final Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
-    _initializeAnimations();
-    _startAnimations();
-    // Trigger auth check after a short delay to allow animations to start
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        context.read<AuthBloc>().add(const AuthEvent.checkAuthStatus());
-      }
-    });
-  }
-
-  void _initializeAnimations() {
-    _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
-      vsync: this,
-    );
-    _scaleController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
-      vsync: this,
-    );
-    _slideController = AnimationController(
+    
+    _controller = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
@@ -54,50 +33,44 @@ class _SplashPageState extends State<SplashPage>
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeInOut,
+      parent: _controller,
+      curve: const Interval(0.0, 0.6, curve: Curves.easeInOut),
     ));
 
     _scaleAnimation = Tween<double>(
       begin: 0.5,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _scaleController,
-      curve: Curves.elasticOut,
+      parent: _controller,
+      curve: const Interval(0.2, 0.8, curve: Curves.elasticOut),
     ));
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.5),
       end: Offset.zero,
     ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
+      parent: _controller,
+      curve: const Interval(0.4, 1.0, curve: Curves.easeOutCubic),
     ));
-  }
 
-  void _startAnimations() {
-    _fadeController.forward();
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) _scaleController.forward();
-    });
-    Future.delayed(const Duration(milliseconds: 600), () {
-      if (mounted) _slideController.forward();
-    });
+    _controller.forward();
+    
+    // Start auth check immediately
+    context.read<AuthBloc>().add(const AuthEvent.checkAuthStatus());
   }
 
   void _navigateWithDelay(String route) {
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        context.go(route);
-      }
+    if (!mounted) return;
+    
+    // Shorter delay since animations are already optimized
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) context.go(route);
     });
   }
 
   @override
   void dispose() {
-    _fadeController.dispose();
-    _scaleController.dispose();
-    _slideController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -113,19 +86,11 @@ class _SplashPageState extends State<SplashPage>
             // Stay on splash while loading
             break;
           case AuthAuthenticated():
-            // Add a minimum splash duration for better UX
             _navigateWithDelay('/dashboard');
             break;
           case AuthUnauthenticated():
-            // Add a minimum splash duration for better UX
-            _navigateWithDelay('/login');
-            break;
           case AuthError():
-            // Add a minimum splash duration for better UX
-            _navigateWithDelay('/login');
-            break;
           case AuthAccessDenied():
-            // Add a minimum splash duration for better UX
             _navigateWithDelay('/login');
             break;
         }
@@ -136,12 +101,7 @@ class _SplashPageState extends State<SplashPage>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF6366f1),
-                Color(0xFF8b5cf6),
-                Color(0xFFa855f7),
-              ],
-              stops: [0.0, 0.5, 1.0],
+              colors: [Color(0xFF6366f1), Color(0xFFa855f7)],
             ),
           ),
           child: SafeArea(
@@ -150,55 +110,45 @@ class _SplashPageState extends State<SplashPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Animated Logo Container
-                  AnimatedBuilder(
-                    animation: _scaleAnimation,
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: _scaleAnimation.value,
-                        child: FadeTransition(
-                          opacity: _fadeAnimation,
-                          child: Container(
-                            width: 140,
-                            height: 140,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(28),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.15),
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 10),
-                                  spreadRadius: 2,
-                                ),
-                                BoxShadow(
-                                  color: Colors.white.withValues(alpha: 0.1),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, -5),
-                                ),
+                  ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Container(
+                        width: 140,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x26000000), // Precomputed alpha
+                              blurRadius: 20,
+                              offset: Offset(0, 10),
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(28),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color(0xFF6366f1),
+                                Color(0xFF8b5cf6),
                               ],
                             ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(28),
-                                gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Color(0xFF6366f1),
-                                    Color(0xFF8b5cf6),
-                                  ],
-                                ),
-                              ),
-                              child: const Icon(
-                                Icons.inventory_2_rounded,
-                                size: 70,
-                                color: Colors.white,
-                              ),
-                            ),
+                          ),
+                          child: const Icon(
+                            Icons.inventory_2_rounded,
+                            size: 70,
+                            color: Colors.white,
                           ),
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 40),
                   // Animated Title
@@ -231,19 +181,19 @@ class _SplashPageState extends State<SplashPage>
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.15),
+                              color: const Color(0x26FFFFFF), // Precomputed alpha
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.3),
+                                color: const Color(0x4DFFFFFF), // Precomputed alpha
                                 width: 1,
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Inventory Management System',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.white.withValues(alpha: 0.95),
+                                color: Color(0xF2FFFFFF), // Precomputed alpha
                                 letterSpacing: 0.5,
                               ),
                             ),
@@ -261,7 +211,7 @@ class _SplashPageState extends State<SplashPage>
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.1),
+                            color: const Color(0x1AFFFFFF), // Precomputed alpha
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: const SizedBox(
@@ -276,12 +226,12 @@ class _SplashPageState extends State<SplashPage>
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Text(
+                        const Text(
                           'Initializing...',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: Colors.white.withValues(alpha: 0.8),
+                            color: Color(0xCCFFFFFF), // Precomputed alpha
                             letterSpacing: 0.5,
                           ),
                         ),
@@ -292,11 +242,11 @@ class _SplashPageState extends State<SplashPage>
                   // Version or Footer Text
                   FadeTransition(
                     opacity: _fadeAnimation,
-                    child: Text(
+                    child: const Text(
                       'Version 1.0.0',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: Color(0x99FFFFFF), // Precomputed alpha
                         letterSpacing: 0.5,
                       ),
                     ),
