@@ -1,7 +1,7 @@
 name: stockmap_admin
 description: "a comprehensive medical stock management system"
 publish_to: 'none'
-version: 0.1.0
+version: 1.4.0
 
 environment:
   sdk: ^3.8.1
@@ -31,20 +31,20 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/maponus-logo.jpg"
+  image_path: "assets/stockmap-icon.png"
   min_sdk_android: 21
   web:
     generate: true
-    image_path: "assets/maponus-logo.jpg"
+    image_path: "assets/stockmap-icon.png"
     background_color: "#ffffff"
     theme_color: "#ffffff"
   windows:
     generate: true
-    image_path: "assets/maponus-logo.jpg"
+    image_path: "assets/stockmap-icon.png"
     icon_size: 48
   macos:
     generate: true
-    image_path: "assets/maponus-logo.jpg"
+    image_path: "assets/stockmap-icon.png"
 
 flutter:
   uses-material-design: true
