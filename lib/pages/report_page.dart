@@ -217,7 +217,7 @@ class _ReportPageState extends State<ReportPage> {
           ],
         ),
       ),
-      bottomNavigationBar: const FooterNavBar(currentRoute: '/report'),
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/dashboard/report'),
     );
   }
 

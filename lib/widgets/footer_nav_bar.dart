@@ -16,25 +16,25 @@ class FooterNavBar extends StatelessWidget {
     NavItem(
       title: 'Stock',
       icon: Icons.inventory_2,
-      route: '/stock',
+      route: '/dashboard/stock',
       color: Color(0xFF818cf8),
     ),
     NavItem(
       title: 'Reports',
       icon: Icons.analytics,
-      route: '/report',
+      route: '/dashboard/report',
       color: Color(0xFFfb923c),
     ),
     NavItem(
       title: 'Sale',
       icon: Icons.people,
-      route: '/sale',
+      route: '/dashboard/sale',
       color: Color(0xFF34d399),
     ),
     NavItem(
       title: 'Purchase',
       icon: Icons.shopping_cart,
-      route: '/purchase',
+      route: '/dashboard/purchase',
       color: Color(0xFFf472b6),
     ),
   ];

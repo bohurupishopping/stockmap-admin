@@ -228,7 +228,7 @@ class _SalePageState extends State<SalePage> {
           ],
         ),
       ),
-      bottomNavigationBar: const FooterNavBar(currentRoute: '/sale'),
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/dashboard/sale'),
     );
   }
   

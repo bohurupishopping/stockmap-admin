@@ -209,7 +209,7 @@ class _StockPageState extends State<StockPage> {
           ],
         ),
       ),
-      bottomNavigationBar: const FooterNavBar(currentRoute: '/stock'),
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/dashboard/stock'),
     );
   }
 

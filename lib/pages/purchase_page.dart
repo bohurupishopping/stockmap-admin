@@ -234,7 +234,7 @@ class _PurchasePageState extends State<PurchasePage> {
           ],
         ),
       ),
-      bottomNavigationBar: const FooterNavBar(currentRoute: '/purchase'),
+      bottomNavigationBar: const FooterNavBar(currentRoute: '/dashboard/purchase'),
     );
   }
   

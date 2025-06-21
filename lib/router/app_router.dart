@@ -60,31 +60,33 @@ class AppRouter {
           path: '/dashboard',
           name: 'dashboard',
           builder: (context, state) => const DashboardPage(),
-        ),
-        GoRoute(
-          path: '/stock',
-          name: 'stock',
-          builder: (context, state) => const StockPage(),
-        ),
-        GoRoute(
-          path: '/report',
-          name: 'report',
-          builder: (context, state) => const ReportPage(),
-        ),
-        GoRoute(
-          path: '/purchase',
-          name: 'purchase',
-          builder: (context, state) => const PurchasePage(),
-        ),
-        GoRoute(
-          path: '/sale',
-          name: 'sale',
-          builder: (context, state) => const SalePage(),
-        ),
-        GoRoute(
-          path: '/ai',
-          name: 'ai',
-          builder: (context, state) => const AiPage(),
+          routes: [
+            GoRoute(
+              path: 'stock',
+              name: 'stock',
+              builder: (context, state) => const StockPage(),
+            ),
+            GoRoute(
+              path: 'report',
+              name: 'report',
+              builder: (context, state) => const ReportPage(),
+            ),
+            GoRoute(
+              path: 'purchase',
+              name: 'purchase',
+              builder: (context, state) => const PurchasePage(),
+            ),
+            GoRoute(
+              path: 'sale',
+              name: 'sale',
+              builder: (context, state) => const SalePage(),
+            ),
+            GoRoute(
+              path: 'ai',
+              name: 'ai',
+              builder: (context, state) => const AiPage(),
+            ),
+          ],
         ),
       ],
     );
