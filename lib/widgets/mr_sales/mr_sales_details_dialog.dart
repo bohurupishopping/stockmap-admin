@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/mr_sale_models.dart';
@@ -59,18 +61,21 @@ class _MRSalesDetailsDialogState extends State<MRSalesDetailsDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 8,
       child: Container(
-        // KEY CHANGE: Increased dialog size for a less cramped feel.
-        constraints: const BoxConstraints(maxWidth: 650, maxHeight: 750),
+        constraints: const BoxConstraints(maxWidth: 600, maxHeight: 700),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildHeader(),
-            // The content area is scrollable.
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -81,19 +86,19 @@ class _MRSalesDetailsDialogState extends State<MRSalesDetailsDialog> {
                       if (widget.order.customerAddress?.isNotEmpty == true)
                         _buildInfoRow('Address', widget.order.customerAddress!),
                     ]),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     _buildInfoSection('MR Information', [
                       _buildInfoRow('MR Name', widget.order.mrUserName ?? 'N/A'),
                     ]),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     _buildInfoSection('Payment Information', [
                       _buildInfoRow('Total Amount', widget.currencyFormat.format(widget.order.totalAmount)),
                       _buildInfoRow('Paid Amount', widget.currencyFormat.format(widget.order.paidAmount)),
                       _buildInfoRow('Pending Amount', widget.currencyFormat.format(widget.order.totalAmount - widget.order.paidAmount),
-                        valueColor: const Color(0xFFEF4444)), // Highlight pending amount
+                        valueColor: const Color(0xFFD97706)), // Professional orange for pending
                       _buildPaymentStatusRow(),
                     ]),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     _buildOrderItemsSection(),
                   ],
                 ),
@@ -106,211 +111,349 @@ class _MRSalesDetailsDialogState extends State<MRSalesDetailsDialog> {
     );
   }
 
-  // --- Header ---
   Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 20, 16, 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFF1E293B),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: Column(
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          // Top row with title and close button
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 16, 12),
+            child: Row(
               children: [
-                // KEY CHANGE: Smaller font for order ID and better styling using RichText.
-                RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                      fontFamily: 'System',
-                      color: Color(0xFF4B5563),
-                      fontSize: 18,
-                    ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextSpan(text: 'Order '),
-                      TextSpan(
-                        text: '#${widget.order.orderId}',
-                        style: const TextStyle(
+                      const Text(
+                        'Order Details',
+                        style: TextStyle(
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1F2937),
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        widget.dateFormat.format(widget.order.orderDate),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF94A3B8),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.dateFormat.format(widget.order.orderDate),
-                  style: const TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close, color: Color(0xFF94A3B8), size: 20),
+                  splashRadius: 18,
                 ),
               ],
             ),
           ),
-          IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.close, color: Color(0xFF6B7280)),
-            splashRadius: 20,
+          // Order ID section with better handling for long IDs
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: const Color(0xFF0F172A),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFF334155), width: 1),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.receipt_long,
+                  color: Color(0xFF94A3B8),
+                  size: 16,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Order ID:',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF94A3B8),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '#${widget.order.orderId}',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontFamily: 'monospace',
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Copy to clipboard functionality
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Order ID copied to clipboard'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF334155),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Icon(
+                      Icons.copy,
+                      color: Color(0xFF94A3B8),
+                      size: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  // --- Content Sections ---
   Widget _buildInfoSection(String title, List<Widget> children) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF374151)),
-        ),
-        const SizedBox(height: 8),
-        // KEY CHANGE: Removed the boxy border. Using dividers between rows for a cleaner look.
-        Column(
-          children: List.generate(children.length, (index) {
-            return Column(
-              children: [
-                children[index],
-                if (index < children.length - 1)
-                  const Divider(height: 16, color: Color(0xFFF3F4F6)),
-              ],
-            );
-          }),
-        ),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: const BoxDecoration(
+              color: Color(0xFF334155),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(11)),
+            ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: List.generate(children.length, (index) {
+                return Column(
+                  children: [
+                    children[index],
+                    if (index < children.length - 1)
+                      const SizedBox(height: 12),
+                  ],
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildInfoRow(String label, String value, {Color? valueColor}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // KEY CHANGE: Replaced fixed width with Expanded for responsive layout.
-          Expanded(
-            flex: 2, // Label takes 2 parts of the space
-            child: Text(
-              label,
-              style: const TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            flex: 3, // Value takes 3 parts of the space
-            child: Text(
-              value,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: valueColor ?? const Color(0xFF1F2937),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPaymentStatusRow() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Expanded(
-            flex: 2,
-            child: Text(
-              'Payment Status',
-              style: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            flex: 3,
-            child: DropdownButtonHideUnderline(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF9FAFB),
-                  border: Border.all(color: const Color(0xFFD1D5DB)),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: DropdownButton<String>(
-                  value: _selectedPaymentStatus,
-                  isExpanded: true,
-                  icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6B7280)),
-                  items: _paymentStatusOptions.map((status) {
-                    return DropdownMenuItem<String>(
-                      value: status['value'],
-                      child: Text(
-                        status['label']!,
-                        style: const TextStyle(fontSize: 14, color: Color(0xFF1F2937)),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) => setState(() => _selectedPaymentStatus = value),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildOrderItemsSection() {
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Order Items (${widget.order.items?.length ?? 0})',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF374151)),
-        ),
-        const SizedBox(height: 12),
-        // KEY CHANGE: Replaced custom rows with ListTile for a standard, clean look.
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-            borderRadius: BorderRadius.circular(12),
+        Expanded(
+          flex: 2,
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Color(0xFF64748B),
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          child: Column(
-            children: widget.order.items?.asMap().entries.map((entry) {
-                  final item = entry.value;
-                  return _buildOrderItemTile(item);
-                }).toList() ?? [],
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          flex: 3,
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: valueColor ?? const Color(0xFF0F172A),
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildOrderItemTile(MRSalesOrderItem item) {
-    return ListTile(
-      title: Text(
-        item.productName ?? 'Unknown Product',
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
-      ),
-      subtitle: Text(
-        'Qty: ${item.quantity}  ·  Rate: ${widget.currencyFormat.format(item.unitPrice)}',
-        style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280)),
-      ),
-      trailing: Text(
-        widget.currencyFormat.format(item.totalPrice),
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF059669)),
-      ),
-      dense: true,
+  Widget _buildPaymentStatusRow() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Expanded(
+          flex: 2,
+          child: Text(
+            'Payment Status',
+            style: TextStyle(
+              fontSize: 13,
+              color: Color(0xFF64748B),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          flex: 3,
+          child: Container(
+            height: 36,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: const Color(0xFFCBD5E1)),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: _selectedPaymentStatus,
+                isExpanded: true,
+                icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF64748B), size: 18),
+                items: _paymentStatusOptions.map((status) {
+                  return DropdownMenuItem<String>(
+                    value: status['value'],
+                    child: Text(
+                      status['label']!,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF0F172A),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) => setState(() => _selectedPaymentStatus = value),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  // --- Footer ---
+  Widget _buildOrderItemsSection() {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: const BoxDecoration(
+              color: Color(0xFF334155),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(11)),
+            ),
+            child: Text(
+              'Order Items (${widget.order.items?.length ?? 0})',
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Column(
+            children: widget.order.items?.asMap().entries.map((entry) {
+                  final item = entry.value;
+                  final isLast = entry.key == (widget.order.items!.length - 1);
+                  return _buildOrderItemTile(item, isLast);
+                }).toList() ?? [],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrderItemTile(MRSalesOrderItem item, bool isLast) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        border: isLast ? null : const Border(
+          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.productName ?? 'Unknown Product',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0F172A),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Qty: ${item.quantity} × ${widget.currencyFormat.format(item.unitPrice)}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF64748B),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: const Color(0xFF10B981).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              widget.currencyFormat.format(item.totalPrice),
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF059669),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildFooter() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
-        color: Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
-        border: Border(top: BorderSide(color: Color(0xFFF3F4F6), width: 1.5)),
+        color: Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+        border: Border(top: BorderSide(color: Color(0xFFE2E8F0), width: 1)),
       ),
       child: Row(
         children: [
@@ -319,10 +462,14 @@ class _MRSalesDetailsDialogState extends State<MRSalesDetailsDialog> {
               onPressed: () => Navigator.of(context).pop(),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                side: const BorderSide(color: Color(0xFFD1D5DB)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                side: const BorderSide(color: Color(0xFF94A3B8)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                foregroundColor: const Color(0xFF475569),
               ),
-              child: const Text('Close', style: TextStyle(color: Color(0xFF374151), fontWeight: FontWeight.w600)),
+              child: const Text(
+                'Close',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -330,18 +477,29 @@ class _MRSalesDetailsDialogState extends State<MRSalesDetailsDialog> {
             child: ElevatedButton(
               onPressed: _isUpdating ? null : _updatePaymentStatus,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF3B82F6),
-                disabledBackgroundColor: const Color(0xFF93C5FD),
+                backgroundColor: const Color(0xFF1E293B),
+                disabledBackgroundColor: const Color(0xFF64748B),
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                elevation: 0,
               ),
               child: _isUpdating
                   ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white),
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
                     )
-                  : const Text('Update Status', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                  : const Text(
+                      'Update Status',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
             ),
           ),
         ],

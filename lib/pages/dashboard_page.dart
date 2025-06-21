@@ -23,10 +23,10 @@ class DashboardPage extends StatelessWidget {
       gradientColors: [Color(0xFF818cf8), Color(0xFF6366f1)],
     ),
     NavItem(
-      title: 'Reports',
-      description: 'View analytics',
+      title: 'MR Activity',
+      description: 'View MR activity',
       icon: Icons.bar_chart_outlined, // Updated icon
-      route: '/dashboard/report',
+      route: '/dashboard/mr-activity',
       color: Color(0xFFfb923c),
       gradientColors: [Color(0xFFfb923c), Color(0xFFf97316)],
     ),
@@ -222,7 +222,7 @@ class _DashboardContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           onTap: () {
             // Updated navigation logic for your specific routes.
-            if (['/dashboard/stock', '/dashboard/report', '/dashboard/sale', '/dashboard/purchase', '/dashboard/ai',
+            if (['/dashboard/stock', '/dashboard/mr-activity', '/dashboard/sale', '/dashboard/purchase', '/dashboard/ai',
           '/dashboard/mr-sales', '/dashboard/mr_purchase', '/dashboard/doctors' ]
 
 
