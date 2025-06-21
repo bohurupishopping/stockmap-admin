@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import '../../models/product_models.dart';
 import 'product_details_dialog.dart';
@@ -14,10 +16,10 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Clean modern color palette - stock-focused design
-    const primaryColor = Color(0xFF2563EB); // Blue
-    const stockColor = Color(0xFF059669); // Green for stock
-    const surfaceColor = Colors.white;
+    // Modernized color palette with darker tones
+    const primaryColor = Color(0xFF1E40AF); // Darker Blue
+// Darker Green
+    const surfaceColor = Color(0xFFF9FAFB); // Off-white
     
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -30,15 +32,12 @@ class ProductCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: surfaceColor,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.grey.shade200,
-                width: 1,
-              ),
+              border: Border.all(color: Colors.grey.shade300, width: 1.5),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.shade100,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
+                  color: Colors.grey.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -92,50 +91,24 @@ class ProductCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Product Code and Status in one row
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue.shade50,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    product.productCode,
-                                    style: TextStyle(
-                                      color: primaryColor,
-                                      fontSize: isCompact ? 9 : 10,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
+                            // Product Code
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: primaryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                product.productCode,
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: isCompact ? 10 : 11,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const Spacer(),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: product.isActive
-                                        ? stockColor.withValues(alpha: 0.1)
-                                        : Colors.red.shade50,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(
-                                    product.isActive ? 'Active' : 'Inactive',
-                                    style: TextStyle(
-                                      color: product.isActive
-                                          ? stockColor
-                                          : Colors.red.shade600,
-                                      fontSize: 8,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                             
                             const SizedBox(height: 4),
@@ -153,17 +126,7 @@ class ProductCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             
-                            // Generic Name - smaller
-                            Text(
-                              product.genericName,
-                              style: TextStyle(
-                                fontSize: isCompact ? 8 : 9,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.grey.shade600,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+
                           ],
                         ),
                       ),
