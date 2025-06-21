@@ -81,8 +81,8 @@ as String,
 /// @nodoc
 @JsonSerializable()
 
-class _MRProfile implements MRProfile {
-  const _MRProfile({required this.userId, required this.name, required this.email});
+class _MRProfile extends MRProfile {
+  const _MRProfile({required this.userId, required this.name, required this.email}): super._();
   factory _MRProfile.fromJson(Map<String, dynamic> json) => _$MRProfileFromJson(json);
 
 @override final  String userId;
@@ -1035,6 +1035,187 @@ type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,mrUserId: null == mrUserId ? _self.mrUserId : mrUserId // ignore: cast_nullable_to_non_nullable
 as String,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$MRVisitLog {
+
+ String get id;@JsonKey(name: 'mr_user_id') String get mrUserId;@JsonKey(name: 'doctor_id') String get doctorId;@JsonKey(name: 'visit_date') DateTime get visitDate;@JsonKey(name: 'products_detailed') String? get productsDetailed;@JsonKey(name: 'feedback_received') String? get feedbackReceived;@JsonKey(name: 'samples_provided') String? get samplesProvided;@JsonKey(name: 'competitor_activity_notes') String? get competitorActivityNotes;@JsonKey(name: 'prescription_potential_notes') String? get prescriptionPotentialNotes;@JsonKey(name: 'next_visit_date') DateTime? get nextVisitDate;@JsonKey(name: 'next_visit_objective') String? get nextVisitObjective;@JsonKey(name: 'linked_sale_order_id') String? get linkedSaleOrderId;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'is_location_verified') bool? get isLocationVerified;@JsonKey(name: 'distance_from_clinic_meters') double? get distanceFromClinicMeters;@JsonKey(name: 'clinic_id') String? get clinicId;@JsonKey(name: 'profiles', fromJson: _mrNameFromProfile, includeToJson: false) String? get mrName;
+/// Create a copy of MRVisitLog
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MRVisitLogCopyWith<MRVisitLog> get copyWith => _$MRVisitLogCopyWithImpl<MRVisitLog>(this as MRVisitLog, _$identity);
+
+  /// Serializes this MRVisitLog to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MRVisitLog&&(identical(other.id, id) || other.id == id)&&(identical(other.mrUserId, mrUserId) || other.mrUserId == mrUserId)&&(identical(other.doctorId, doctorId) || other.doctorId == doctorId)&&(identical(other.visitDate, visitDate) || other.visitDate == visitDate)&&(identical(other.productsDetailed, productsDetailed) || other.productsDetailed == productsDetailed)&&(identical(other.feedbackReceived, feedbackReceived) || other.feedbackReceived == feedbackReceived)&&(identical(other.samplesProvided, samplesProvided) || other.samplesProvided == samplesProvided)&&(identical(other.competitorActivityNotes, competitorActivityNotes) || other.competitorActivityNotes == competitorActivityNotes)&&(identical(other.prescriptionPotentialNotes, prescriptionPotentialNotes) || other.prescriptionPotentialNotes == prescriptionPotentialNotes)&&(identical(other.nextVisitDate, nextVisitDate) || other.nextVisitDate == nextVisitDate)&&(identical(other.nextVisitObjective, nextVisitObjective) || other.nextVisitObjective == nextVisitObjective)&&(identical(other.linkedSaleOrderId, linkedSaleOrderId) || other.linkedSaleOrderId == linkedSaleOrderId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isLocationVerified, isLocationVerified) || other.isLocationVerified == isLocationVerified)&&(identical(other.distanceFromClinicMeters, distanceFromClinicMeters) || other.distanceFromClinicMeters == distanceFromClinicMeters)&&(identical(other.clinicId, clinicId) || other.clinicId == clinicId)&&(identical(other.mrName, mrName) || other.mrName == mrName));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,mrUserId,doctorId,visitDate,productsDetailed,feedbackReceived,samplesProvided,competitorActivityNotes,prescriptionPotentialNotes,nextVisitDate,nextVisitObjective,linkedSaleOrderId,createdAt,isLocationVerified,distanceFromClinicMeters,clinicId,mrName);
+
+@override
+String toString() {
+  return 'MRVisitLog(id: $id, mrUserId: $mrUserId, doctorId: $doctorId, visitDate: $visitDate, productsDetailed: $productsDetailed, feedbackReceived: $feedbackReceived, samplesProvided: $samplesProvided, competitorActivityNotes: $competitorActivityNotes, prescriptionPotentialNotes: $prescriptionPotentialNotes, nextVisitDate: $nextVisitDate, nextVisitObjective: $nextVisitObjective, linkedSaleOrderId: $linkedSaleOrderId, createdAt: $createdAt, isLocationVerified: $isLocationVerified, distanceFromClinicMeters: $distanceFromClinicMeters, clinicId: $clinicId, mrName: $mrName)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $MRVisitLogCopyWith<$Res>  {
+  factory $MRVisitLogCopyWith(MRVisitLog value, $Res Function(MRVisitLog) _then) = _$MRVisitLogCopyWithImpl;
+@useResult
+$Res call({
+ String id,@JsonKey(name: 'mr_user_id') String mrUserId,@JsonKey(name: 'doctor_id') String doctorId,@JsonKey(name: 'visit_date') DateTime visitDate,@JsonKey(name: 'products_detailed') String? productsDetailed,@JsonKey(name: 'feedback_received') String? feedbackReceived,@JsonKey(name: 'samples_provided') String? samplesProvided,@JsonKey(name: 'competitor_activity_notes') String? competitorActivityNotes,@JsonKey(name: 'prescription_potential_notes') String? prescriptionPotentialNotes,@JsonKey(name: 'next_visit_date') DateTime? nextVisitDate,@JsonKey(name: 'next_visit_objective') String? nextVisitObjective,@JsonKey(name: 'linked_sale_order_id') String? linkedSaleOrderId,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'is_location_verified') bool? isLocationVerified,@JsonKey(name: 'distance_from_clinic_meters') double? distanceFromClinicMeters,@JsonKey(name: 'clinic_id') String? clinicId,@JsonKey(name: 'profiles', fromJson: _mrNameFromProfile, includeToJson: false) String? mrName
+});
+
+
+
+
+}
+/// @nodoc
+class _$MRVisitLogCopyWithImpl<$Res>
+    implements $MRVisitLogCopyWith<$Res> {
+  _$MRVisitLogCopyWithImpl(this._self, this._then);
+
+  final MRVisitLog _self;
+  final $Res Function(MRVisitLog) _then;
+
+/// Create a copy of MRVisitLog
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? mrUserId = null,Object? doctorId = null,Object? visitDate = null,Object? productsDetailed = freezed,Object? feedbackReceived = freezed,Object? samplesProvided = freezed,Object? competitorActivityNotes = freezed,Object? prescriptionPotentialNotes = freezed,Object? nextVisitDate = freezed,Object? nextVisitObjective = freezed,Object? linkedSaleOrderId = freezed,Object? createdAt = null,Object? isLocationVerified = freezed,Object? distanceFromClinicMeters = freezed,Object? clinicId = freezed,Object? mrName = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,mrUserId: null == mrUserId ? _self.mrUserId : mrUserId // ignore: cast_nullable_to_non_nullable
+as String,doctorId: null == doctorId ? _self.doctorId : doctorId // ignore: cast_nullable_to_non_nullable
+as String,visitDate: null == visitDate ? _self.visitDate : visitDate // ignore: cast_nullable_to_non_nullable
+as DateTime,productsDetailed: freezed == productsDetailed ? _self.productsDetailed : productsDetailed // ignore: cast_nullable_to_non_nullable
+as String?,feedbackReceived: freezed == feedbackReceived ? _self.feedbackReceived : feedbackReceived // ignore: cast_nullable_to_non_nullable
+as String?,samplesProvided: freezed == samplesProvided ? _self.samplesProvided : samplesProvided // ignore: cast_nullable_to_non_nullable
+as String?,competitorActivityNotes: freezed == competitorActivityNotes ? _self.competitorActivityNotes : competitorActivityNotes // ignore: cast_nullable_to_non_nullable
+as String?,prescriptionPotentialNotes: freezed == prescriptionPotentialNotes ? _self.prescriptionPotentialNotes : prescriptionPotentialNotes // ignore: cast_nullable_to_non_nullable
+as String?,nextVisitDate: freezed == nextVisitDate ? _self.nextVisitDate : nextVisitDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,nextVisitObjective: freezed == nextVisitObjective ? _self.nextVisitObjective : nextVisitObjective // ignore: cast_nullable_to_non_nullable
+as String?,linkedSaleOrderId: freezed == linkedSaleOrderId ? _self.linkedSaleOrderId : linkedSaleOrderId // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,isLocationVerified: freezed == isLocationVerified ? _self.isLocationVerified : isLocationVerified // ignore: cast_nullable_to_non_nullable
+as bool?,distanceFromClinicMeters: freezed == distanceFromClinicMeters ? _self.distanceFromClinicMeters : distanceFromClinicMeters // ignore: cast_nullable_to_non_nullable
+as double?,clinicId: freezed == clinicId ? _self.clinicId : clinicId // ignore: cast_nullable_to_non_nullable
+as String?,mrName: freezed == mrName ? _self.mrName : mrName // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// @nodoc
+@JsonSerializable()
+
+class _MRVisitLog implements MRVisitLog {
+  const _MRVisitLog({required this.id, @JsonKey(name: 'mr_user_id') required this.mrUserId, @JsonKey(name: 'doctor_id') required this.doctorId, @JsonKey(name: 'visit_date') required this.visitDate, @JsonKey(name: 'products_detailed') this.productsDetailed, @JsonKey(name: 'feedback_received') this.feedbackReceived, @JsonKey(name: 'samples_provided') this.samplesProvided, @JsonKey(name: 'competitor_activity_notes') this.competitorActivityNotes, @JsonKey(name: 'prescription_potential_notes') this.prescriptionPotentialNotes, @JsonKey(name: 'next_visit_date') this.nextVisitDate, @JsonKey(name: 'next_visit_objective') this.nextVisitObjective, @JsonKey(name: 'linked_sale_order_id') this.linkedSaleOrderId, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'is_location_verified') this.isLocationVerified, @JsonKey(name: 'distance_from_clinic_meters') this.distanceFromClinicMeters, @JsonKey(name: 'clinic_id') this.clinicId, @JsonKey(name: 'profiles', fromJson: _mrNameFromProfile, includeToJson: false) this.mrName});
+  factory _MRVisitLog.fromJson(Map<String, dynamic> json) => _$MRVisitLogFromJson(json);
+
+@override final  String id;
+@override@JsonKey(name: 'mr_user_id') final  String mrUserId;
+@override@JsonKey(name: 'doctor_id') final  String doctorId;
+@override@JsonKey(name: 'visit_date') final  DateTime visitDate;
+@override@JsonKey(name: 'products_detailed') final  String? productsDetailed;
+@override@JsonKey(name: 'feedback_received') final  String? feedbackReceived;
+@override@JsonKey(name: 'samples_provided') final  String? samplesProvided;
+@override@JsonKey(name: 'competitor_activity_notes') final  String? competitorActivityNotes;
+@override@JsonKey(name: 'prescription_potential_notes') final  String? prescriptionPotentialNotes;
+@override@JsonKey(name: 'next_visit_date') final  DateTime? nextVisitDate;
+@override@JsonKey(name: 'next_visit_objective') final  String? nextVisitObjective;
+@override@JsonKey(name: 'linked_sale_order_id') final  String? linkedSaleOrderId;
+@override@JsonKey(name: 'created_at') final  DateTime createdAt;
+@override@JsonKey(name: 'is_location_verified') final  bool? isLocationVerified;
+@override@JsonKey(name: 'distance_from_clinic_meters') final  double? distanceFromClinicMeters;
+@override@JsonKey(name: 'clinic_id') final  String? clinicId;
+@override@JsonKey(name: 'profiles', fromJson: _mrNameFromProfile, includeToJson: false) final  String? mrName;
+
+/// Create a copy of MRVisitLog
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$MRVisitLogCopyWith<_MRVisitLog> get copyWith => __$MRVisitLogCopyWithImpl<_MRVisitLog>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$MRVisitLogToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MRVisitLog&&(identical(other.id, id) || other.id == id)&&(identical(other.mrUserId, mrUserId) || other.mrUserId == mrUserId)&&(identical(other.doctorId, doctorId) || other.doctorId == doctorId)&&(identical(other.visitDate, visitDate) || other.visitDate == visitDate)&&(identical(other.productsDetailed, productsDetailed) || other.productsDetailed == productsDetailed)&&(identical(other.feedbackReceived, feedbackReceived) || other.feedbackReceived == feedbackReceived)&&(identical(other.samplesProvided, samplesProvided) || other.samplesProvided == samplesProvided)&&(identical(other.competitorActivityNotes, competitorActivityNotes) || other.competitorActivityNotes == competitorActivityNotes)&&(identical(other.prescriptionPotentialNotes, prescriptionPotentialNotes) || other.prescriptionPotentialNotes == prescriptionPotentialNotes)&&(identical(other.nextVisitDate, nextVisitDate) || other.nextVisitDate == nextVisitDate)&&(identical(other.nextVisitObjective, nextVisitObjective) || other.nextVisitObjective == nextVisitObjective)&&(identical(other.linkedSaleOrderId, linkedSaleOrderId) || other.linkedSaleOrderId == linkedSaleOrderId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isLocationVerified, isLocationVerified) || other.isLocationVerified == isLocationVerified)&&(identical(other.distanceFromClinicMeters, distanceFromClinicMeters) || other.distanceFromClinicMeters == distanceFromClinicMeters)&&(identical(other.clinicId, clinicId) || other.clinicId == clinicId)&&(identical(other.mrName, mrName) || other.mrName == mrName));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,mrUserId,doctorId,visitDate,productsDetailed,feedbackReceived,samplesProvided,competitorActivityNotes,prescriptionPotentialNotes,nextVisitDate,nextVisitObjective,linkedSaleOrderId,createdAt,isLocationVerified,distanceFromClinicMeters,clinicId,mrName);
+
+@override
+String toString() {
+  return 'MRVisitLog(id: $id, mrUserId: $mrUserId, doctorId: $doctorId, visitDate: $visitDate, productsDetailed: $productsDetailed, feedbackReceived: $feedbackReceived, samplesProvided: $samplesProvided, competitorActivityNotes: $competitorActivityNotes, prescriptionPotentialNotes: $prescriptionPotentialNotes, nextVisitDate: $nextVisitDate, nextVisitObjective: $nextVisitObjective, linkedSaleOrderId: $linkedSaleOrderId, createdAt: $createdAt, isLocationVerified: $isLocationVerified, distanceFromClinicMeters: $distanceFromClinicMeters, clinicId: $clinicId, mrName: $mrName)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$MRVisitLogCopyWith<$Res> implements $MRVisitLogCopyWith<$Res> {
+  factory _$MRVisitLogCopyWith(_MRVisitLog value, $Res Function(_MRVisitLog) _then) = __$MRVisitLogCopyWithImpl;
+@override @useResult
+$Res call({
+ String id,@JsonKey(name: 'mr_user_id') String mrUserId,@JsonKey(name: 'doctor_id') String doctorId,@JsonKey(name: 'visit_date') DateTime visitDate,@JsonKey(name: 'products_detailed') String? productsDetailed,@JsonKey(name: 'feedback_received') String? feedbackReceived,@JsonKey(name: 'samples_provided') String? samplesProvided,@JsonKey(name: 'competitor_activity_notes') String? competitorActivityNotes,@JsonKey(name: 'prescription_potential_notes') String? prescriptionPotentialNotes,@JsonKey(name: 'next_visit_date') DateTime? nextVisitDate,@JsonKey(name: 'next_visit_objective') String? nextVisitObjective,@JsonKey(name: 'linked_sale_order_id') String? linkedSaleOrderId,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'is_location_verified') bool? isLocationVerified,@JsonKey(name: 'distance_from_clinic_meters') double? distanceFromClinicMeters,@JsonKey(name: 'clinic_id') String? clinicId,@JsonKey(name: 'profiles', fromJson: _mrNameFromProfile, includeToJson: false) String? mrName
+});
+
+
+
+
+}
+/// @nodoc
+class __$MRVisitLogCopyWithImpl<$Res>
+    implements _$MRVisitLogCopyWith<$Res> {
+  __$MRVisitLogCopyWithImpl(this._self, this._then);
+
+  final _MRVisitLog _self;
+  final $Res Function(_MRVisitLog) _then;
+
+/// Create a copy of MRVisitLog
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? mrUserId = null,Object? doctorId = null,Object? visitDate = null,Object? productsDetailed = freezed,Object? feedbackReceived = freezed,Object? samplesProvided = freezed,Object? competitorActivityNotes = freezed,Object? prescriptionPotentialNotes = freezed,Object? nextVisitDate = freezed,Object? nextVisitObjective = freezed,Object? linkedSaleOrderId = freezed,Object? createdAt = null,Object? isLocationVerified = freezed,Object? distanceFromClinicMeters = freezed,Object? clinicId = freezed,Object? mrName = freezed,}) {
+  return _then(_MRVisitLog(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,mrUserId: null == mrUserId ? _self.mrUserId : mrUserId // ignore: cast_nullable_to_non_nullable
+as String,doctorId: null == doctorId ? _self.doctorId : doctorId // ignore: cast_nullable_to_non_nullable
+as String,visitDate: null == visitDate ? _self.visitDate : visitDate // ignore: cast_nullable_to_non_nullable
+as DateTime,productsDetailed: freezed == productsDetailed ? _self.productsDetailed : productsDetailed // ignore: cast_nullable_to_non_nullable
+as String?,feedbackReceived: freezed == feedbackReceived ? _self.feedbackReceived : feedbackReceived // ignore: cast_nullable_to_non_nullable
+as String?,samplesProvided: freezed == samplesProvided ? _self.samplesProvided : samplesProvided // ignore: cast_nullable_to_non_nullable
+as String?,competitorActivityNotes: freezed == competitorActivityNotes ? _self.competitorActivityNotes : competitorActivityNotes // ignore: cast_nullable_to_non_nullable
+as String?,prescriptionPotentialNotes: freezed == prescriptionPotentialNotes ? _self.prescriptionPotentialNotes : prescriptionPotentialNotes // ignore: cast_nullable_to_non_nullable
+as String?,nextVisitDate: freezed == nextVisitDate ? _self.nextVisitDate : nextVisitDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,nextVisitObjective: freezed == nextVisitObjective ? _self.nextVisitObjective : nextVisitObjective // ignore: cast_nullable_to_non_nullable
+as String?,linkedSaleOrderId: freezed == linkedSaleOrderId ? _self.linkedSaleOrderId : linkedSaleOrderId // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,isLocationVerified: freezed == isLocationVerified ? _self.isLocationVerified : isLocationVerified // ignore: cast_nullable_to_non_nullable
+as bool?,distanceFromClinicMeters: freezed == distanceFromClinicMeters ? _self.distanceFromClinicMeters : distanceFromClinicMeters // ignore: cast_nullable_to_non_nullable
+as double?,clinicId: freezed == clinicId ? _self.clinicId : clinicId // ignore: cast_nullable_to_non_nullable
+as String?,mrName: freezed == mrName ? _self.mrName : mrName // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

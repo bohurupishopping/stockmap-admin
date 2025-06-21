@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/doctor_models.dart';
+import '../models/mr_activity_models.dart';
 
 class DoctorService {
   final SupabaseClient _supabase = Supabase.instance.client;
@@ -101,6 +102,7 @@ class DoctorService {
     DateTime? dateTo,
   }) async {
     try {
+      
       dynamic query = _supabase
           .from('mr_visit_logs')
           .select('''
@@ -122,10 +124,22 @@ class DoctorService {
 
       final response = await query;
       
-      return (response as List)
-          .map((log) => MRVisitLog.fromJson(log))
+      
+      final visitLogs = (response as List)
+          .map((log) {
+            try {
+              final visitLog = MRVisitLog.fromJson(log);
+              return visitLog;
+            } catch (parseError) {
+              rethrow;
+            }
+          })
           .toList();
+      
+      return visitLogs;
     } catch (e) {
+      if (e is PostgrestException) {
+      }
       throw Exception('Failed to fetch visit logs: $e');
     }
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:geocoding/geocoding.dart';
 import '../../models/doctor_models.dart';
+import '../../models/mr_activity_models.dart';
 import '../../services/doctor_service.dart';
 
 // --- Professional Color Palette ---
@@ -563,7 +564,7 @@ class _DoctorDetailsDialogState extends State<DoctorDetailsDialog>
                   Text(
                     visit.mrName!,
                     style: const TextStyle(fontSize: 14, color: _primaryColor, fontWeight: FontWeight.w500),
-                  ),
+                  ) else const SizedBox.shrink(),
               ],
             ),
             const Divider(height: 24, color: _borderColor),

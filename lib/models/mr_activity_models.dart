@@ -4,31 +4,18 @@ part 'mr_activity_models.freezed.dart';
 part 'mr_activity_models.g.dart';
 
 @freezed
-class MRProfile with _$MRProfile {
+abstract class MRProfile with _$MRProfile {
   const factory MRProfile({
     required String userId,
     required String name,
     required String email,
   }) = _MRProfile;
 
+  const MRProfile._();
+
+
+
   factory MRProfile.fromJson(Map<String, dynamic> json) => _$MRProfileFromJson(json);
-  
-  @override
-
-  String get email => throw UnimplementedError();
-  
-  @override
-
-  String get name => throw UnimplementedError();
-  
-  @override
-  Map<String, dynamic> toJson() {
-    
-    throw UnimplementedError();
-  }
-  
-  @override
-  String get userId => throw UnimplementedError();
 }
 
 @freezed
@@ -113,4 +100,38 @@ abstract class StrategicRecommendation with _$StrategicRecommendation {
   }) = _StrategicRecommendation;
 
   factory StrategicRecommendation.fromJson(Map<String, dynamic> json) => _$StrategicRecommendationFromJson(json);
+}
+
+@freezed
+abstract class MRVisitLog with _$MRVisitLog {
+  const factory MRVisitLog({
+    required String id,
+    @JsonKey(name: 'mr_user_id') required String mrUserId,
+    @JsonKey(name: 'doctor_id') required String doctorId,
+    @JsonKey(name: 'visit_date') required DateTime visitDate,
+    @JsonKey(name: 'products_detailed') String? productsDetailed,
+    @JsonKey(name: 'feedback_received') String? feedbackReceived,
+    @JsonKey(name: 'samples_provided') String? samplesProvided,
+    @JsonKey(name: 'competitor_activity_notes') String? competitorActivityNotes,
+    @JsonKey(name: 'prescription_potential_notes') String? prescriptionPotentialNotes,
+    @JsonKey(name: 'next_visit_date') DateTime? nextVisitDate,
+    @JsonKey(name: 'next_visit_objective') String? nextVisitObjective,
+    @JsonKey(name: 'linked_sale_order_id') String? linkedSaleOrderId,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'is_location_verified') bool? isLocationVerified,
+    @JsonKey(name: 'distance_from_clinic_meters') double? distanceFromClinicMeters,
+    @JsonKey(name: 'clinic_id') String? clinicId,
+    @JsonKey(name: 'profiles', fromJson: _mrNameFromProfile, includeToJson: false)
+    String? mrName,
+  }) = _MRVisitLog;
+
+  factory MRVisitLog.fromJson(Map<String, dynamic> json) =>
+      _$MRVisitLogFromJson(json);
+}
+
+String? _mrNameFromProfile(Map<String, dynamic>? profile) {
+  if (profile != null && profile.containsKey('name')) {
+    return profile['name'] as String?;
+  }
+  return null;
 }

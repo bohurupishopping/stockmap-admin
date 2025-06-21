@@ -138,3 +138,46 @@ Map<String, dynamic> _$StrategicRecommendationToJson(
   'message': instance.message,
   'mrUserId': instance.mrUserId,
 };
+
+_MRVisitLog _$MRVisitLogFromJson(Map<String, dynamic> json) => _MRVisitLog(
+  id: json['id'] as String,
+  mrUserId: json['mr_user_id'] as String,
+  doctorId: json['doctor_id'] as String,
+  visitDate: DateTime.parse(json['visit_date'] as String),
+  productsDetailed: json['products_detailed'] as String?,
+  feedbackReceived: json['feedback_received'] as String?,
+  samplesProvided: json['samples_provided'] as String?,
+  competitorActivityNotes: json['competitor_activity_notes'] as String?,
+  prescriptionPotentialNotes: json['prescription_potential_notes'] as String?,
+  nextVisitDate: json['next_visit_date'] == null
+      ? null
+      : DateTime.parse(json['next_visit_date'] as String),
+  nextVisitObjective: json['next_visit_objective'] as String?,
+  linkedSaleOrderId: json['linked_sale_order_id'] as String?,
+  createdAt: DateTime.parse(json['created_at'] as String),
+  isLocationVerified: json['is_location_verified'] as bool?,
+  distanceFromClinicMeters: (json['distance_from_clinic_meters'] as num?)
+      ?.toDouble(),
+  clinicId: json['clinic_id'] as String?,
+  mrName: _mrNameFromProfile(json['profiles'] as Map<String, dynamic>?),
+);
+
+Map<String, dynamic> _$MRVisitLogToJson(_MRVisitLog instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'mr_user_id': instance.mrUserId,
+      'doctor_id': instance.doctorId,
+      'visit_date': instance.visitDate.toIso8601String(),
+      'products_detailed': instance.productsDetailed,
+      'feedback_received': instance.feedbackReceived,
+      'samples_provided': instance.samplesProvided,
+      'competitor_activity_notes': instance.competitorActivityNotes,
+      'prescription_potential_notes': instance.prescriptionPotentialNotes,
+      'next_visit_date': instance.nextVisitDate?.toIso8601String(),
+      'next_visit_objective': instance.nextVisitObjective,
+      'linked_sale_order_id': instance.linkedSaleOrderId,
+      'created_at': instance.createdAt.toIso8601String(),
+      'is_location_verified': instance.isLocationVerified,
+      'distance_from_clinic_meters': instance.distanceFromClinicMeters,
+      'clinic_id': instance.clinicId,
+    };
