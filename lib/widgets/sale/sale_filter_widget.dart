@@ -101,266 +101,357 @@ class _SaleFilterWidgetState extends State<SaleFilterWidget> {
     }
   }
 
+  Widget _buildDateField({
+    required String label,
+    required DateTime? date,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFFD1D5DB)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.calendar_today,
+              size: 16,
+              color: Color(0xFF6B7280),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                date != null ? _dateFormat.format(date) : label,
+                style: TextStyle(
+                  color: date != null
+                      ? const Color(0xFF374151)
+                      : const Color(0xFF9CA3AF),
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSortDropdown() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFFD1D5DB)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: DropdownButtonFormField<String>(
+        value: '${widget.sortField}_${widget.sortDirection}',
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          hintText: 'Select sort option',
+          hintStyle: TextStyle(color: Color(0xFF9CA3AF)),
+        ),
+        items: const [
+          DropdownMenuItem(
+            value: 'sale_date_desc',
+            child: Text('Date (Newest)'),
+          ),
+          DropdownMenuItem(
+            value: 'sale_date_asc',
+            child: Text('Date (Oldest)'),
+          ),
+          DropdownMenuItem(
+            value: 'cost_per_strip_desc',
+            child: Text('Price (High to Low)'),
+          ),
+          DropdownMenuItem(
+            value: 'cost_per_strip_asc',
+            child: Text('Price (Low to High)'),
+          ),
+          DropdownMenuItem(
+            value: 'quantity_strips_desc',
+            child: Text('Quantity (High to Low)'),
+          ),
+          DropdownMenuItem(
+            value: 'quantity_strips_asc',
+            child: Text('Quantity (Low to High)'),
+          ),
+        ],
+        onChanged: (value) {
+          if (value != null) {
+            widget.onSortChanged(value);
+          }
+        },
+        style: const TextStyle(
+          color: Color(0xFF374151),
+          fontSize: 14,
+        ),
+        dropdownColor: Colors.white,
+        icon: const Icon(
+          Icons.keyboard_arrow_down,
+          color: Color(0xFF6B7280),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            children: [
-              Icon(
-                Icons.filter_list,
-                color: Theme.of(context).primaryColor,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'Filters & Search',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const Spacer(),
-              if (widget.initialFilters?.hasActiveFilters == true)
-                TextButton.icon(
-                  onPressed: _clearFilters,
-                  icon: const Icon(Icons.clear, size: 16),
-                  label: const Text('Clear All'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.red[600],
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Filter Sales',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1F2937),
                   ),
                 ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Search and Sort Row
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search by product name...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                  ),
-                  onChanged: (value) {
-                    _applyFilters();
-                  },
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
                 ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            
+            // Search
+            const Text(
+              'Search',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF374151),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                flex: 2,
-                child: DropdownButtonFormField<String>(
-                  value: '${widget.sortField}_${widget.sortDirection}',
-                  decoration: InputDecoration(
-                    labelText: 'Sort by',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                  ),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'sale_date_desc',
-                      child: Text('Date (Newest)'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'sale_date_asc',
-                      child: Text('Date (Oldest)'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'cost_per_strip_desc',
-                      child: Text('Price (High to Low)'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'cost_per_strip_asc',
-                      child: Text('Price (Low to High)'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'quantity_strips_desc',
-                      child: Text('Quantity (High to Low)'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'quantity_strips_asc',
-                      child: Text('Quantity (Low to High)'),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      widget.onSortChanged(value);
-                    }
-                  },
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search by product name...',
+                hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+                prefixIcon: const Icon(Icons.search, color: Color(0xFF6B7280)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Filter Fields Row 1
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _batchController,
-                  decoration: InputDecoration(
-                    labelText: 'Batch Number',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                  ),
-                  onChanged: (value) => _applyFilters(),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: TextField(
-                  controller: _referenceController,
-                  decoration: InputDecoration(
-                    labelText: 'Reference Document',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                  ),
-                  onChanged: (value) => _applyFilters(),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Color(0xFF3B82F6)),
                 ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: TextField(
-                  controller: _transactionTypeController,
-                  decoration: InputDecoration(
-                    labelText: 'Transaction Type',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                  ),
-                  onChanged: (value) => _applyFilters(),
-                ),
+              onChanged: (value) {
+                _applyFilters();
+              },
+            ),
+            const SizedBox(height: 20),
+            
+            // Sort
+            const Text(
+              'Sort By',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF374151),
               ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Date Range Row
-          Row(
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () => _selectDate(context, true),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
+            ),
+            const SizedBox(height: 12),
+            _buildSortDropdown(),
+            const SizedBox(height: 20),
+            
+            // Additional Filters
+            const Text(
+              'Additional Filters',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF374151),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _batchController,
+                    decoration: InputDecoration(
+                      labelText: 'Batch Number',
+                      labelStyle: const TextStyle(color: Color(0xFF6B7280)),
+                      hintText: 'Enter batch number',
+                      hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF3B82F6)),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[400]!),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.calendar_today, size: 16),
-                        const SizedBox(width: 8),
-                        Text(
-                          _startDate != null
-                              ? 'From: ${_dateFormat.format(_startDate!)}'
-                              : 'Start Date',
-                          style: TextStyle(
-                            color: _startDate != null
-                                ? Theme.of(context).textTheme.bodyLarge?.color
-                                : Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
+                    onChanged: (value) => _applyFilters(),
                   ),
                 ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextField(
+                    controller: _referenceController,
+                    decoration: InputDecoration(
+                      labelText: 'Reference Document',
+                      labelStyle: const TextStyle(color: Color(0xFF6B7280)),
+                      hintText: 'Enter reference ID',
+                      hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFF3B82F6)),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                    onChanged: (value) => _applyFilters(),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _transactionTypeController,
+              decoration: InputDecoration(
+                labelText: 'Transaction Type',
+                labelStyle: const TextStyle(color: Color(0xFF6B7280)),
+                hintText: 'Enter transaction type',
+                hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Color(0xFFD1D5DB)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: Color(0xFF3B82F6)),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: InkWell(
-                  onTap: () => _selectDate(context, false),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
+              onChanged: (value) => _applyFilters(),
+            ),
+            const SizedBox(height: 20),
+            
+            // Date Range
+            const Text(
+              'Date Range',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF374151),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildDateField(
+                    label: 'From Date',
+                    date: _startDate,
+                    onTap: () => _selectDate(context, true),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildDateField(
+                    label: 'To Date',
+                    date: _endDate,
+                    onTap: () => _selectDate(context, false),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            
+            // Action Buttons
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: _clearFilters,
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      side: const BorderSide(color: Color(0xFFD1D5DB)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[400]!),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.calendar_today, size: 16),
-                        const SizedBox(width: 8),
-                        Text(
-                          _endDate != null
-                              ? 'To: ${_dateFormat.format(_endDate!)}'
-                              : 'End Date',
-                          style: TextStyle(
-                            color: _endDate != null
-                                ? Theme.of(context).textTheme.bodyLarge?.color
-                                : Colors.grey[600],
-                          ),
-                        ),
-                      ],
+                    child: const Text(
+                      'Clear All',
+                      style: TextStyle(
+                        color: Color(0xFF374151),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              ElevatedButton.icon(
-                onPressed: _applyFilters,
-                icon: const Icon(Icons.search, size: 16),
-                label: const Text('Apply'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _applyFilters,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF3B82F6),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Apply Filters',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -265,7 +265,7 @@ class _PurchasePageState extends State<PurchasePage> {
                       ],
                     ),
                   ),
-                  // Search/Filter toggle button
+                  // Search button
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
@@ -275,10 +275,45 @@ class _PurchasePageState extends State<PurchasePage> {
                       onPressed: () {
                         setState(() {
                           _isSearchFilterVisible = !_isSearchFilterVisible;
+                          if (!_isSearchFilterVisible) {
+                            _searchQuery = '';
+                            _loadData(isRefresh: true);
+                          }
                         });
                       },
                       icon: Icon(
-                        _isSearchFilterVisible ? Icons.filter_list_off : Icons.filter_list,
+                        _isSearchFilterVisible ? Icons.close : Icons.search,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Filter button
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => PurchaseFilterWidget(
+                            initialFilters: _filters,
+                            onFiltersChanged: _onFiltersChanged,
+                            searchQuery: _searchQuery,
+                            onSearchChanged: _onSearchChanged,
+                            sortField: _sortField,
+                            sortDirection: _sortDirection,
+                            onSortChanged: _onSort,
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.filter_list,
                         color: Colors.white,
                         size: 24,
                       ),
@@ -303,17 +338,9 @@ class _PurchasePageState extends State<PurchasePage> {
                 ],
               ),
             ),
-            // Collapsible Search and Filter Section
+            // Collapsible Search Section
             if (_isSearchFilterVisible)
-              PurchaseFilterWidget(
-                initialFilters: _filters,
-                onFiltersChanged: _onFiltersChanged,
-                searchQuery: _searchQuery,
-                onSearchChanged: _onSearchChanged,
-                sortField: _sortField,
-                sortDirection: _sortDirection,
-                onSortChanged: _onSort,
-              ),
+              _buildSearchAndFilters(),
           ],
         ),
       ),
@@ -401,6 +428,35 @@ class _PurchasePageState extends State<PurchasePage> {
     return const SizedBox.shrink();
   }
   
+  Widget _buildSearchAndFilters() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: TextField(
+        onChanged: _onSearchChanged,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: 'Search by product name...',
+          hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+          prefixIcon: Icon(Icons.search_rounded, color: Colors.white.withValues(alpha: 0.7)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.white),
+          ),
+          filled: true,
+          fillColor: Colors.white.withValues(alpha: 0.1),
+        ),
+      ),
+    );
+  }
+
   void _showTransactionDetails(PurchaseTransaction transaction) {
     showDialog(
       context: context,
@@ -411,5 +467,4 @@ class _PurchasePageState extends State<PurchasePage> {
       ),
     );
   }
-  
 }

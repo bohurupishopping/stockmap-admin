@@ -159,90 +159,204 @@ class _DoctorsPageState extends State<DoctorsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        title: const Text(
-          'Doctors',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1F2937),
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Color(0xFF1F2937)),
-        actions: [
-          IconButton(
-            icon: Icon(
-              _isSearchFilterVisible ? Icons.close : Icons.search,
-              color: const Color(0xFF1F2937),
-            ),
-            onPressed: () {
-              setState(() {
-                _isSearchFilterVisible = !_isSearchFilterVisible;
-                if (!_isSearchFilterVisible) {
-                  _searchQuery = '';
-                  _loadData(isRefresh: true);
-                }
-              });
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.filter_list,
-              color: Color(0xFF1F2937),
-            ),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => DoctorFilterWidget(
-                  currentFilters: _filters,
-                  onFiltersChanged: _onFiltersChanged,
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.add,
-              color: Color(0xFF1F2937),
-            ),
-            onPressed: () {
-             
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Add doctor functionality coming soon'),
-                  backgroundColor: Colors.blue,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: LoadingOverlay(
-        isLoading: _isLoading && _doctors.isEmpty,
+      body: SafeArea(
         child: Column(
           children: [
-            // Summary Cards
-            if (_summary != null) _buildSummaryCards(),
-            
-            // Search Bar
-            if (_isSearchFilterVisible) _buildSearchBar(),
-            
-            // Error Message
-            if (_error != null) _buildErrorMessage(),
-            
-            // Doctors List
+            _buildHeader(),
             Expanded(
-              child: _doctors.isEmpty && !_isLoading
-                  ? _buildEmptyState()
-                  : _buildDoctorsList(),
+              child: LoadingOverlay(
+                isLoading: _isLoading && _doctors.isEmpty,
+                child: Column(
+                  children: [
+                    // Summary Cards
+                    if (_summary != null) _buildSummaryCards(),
+                    
+                    // Error Message
+                    if (_error != null) _buildErrorMessage(),
+                    
+                    // Doctors List
+                    Expanded(
+                      child: _doctors.isEmpty && !_isLoading
+                          ? _buildEmptyState()
+                          : _buildDoctorsList(),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: const FooterNavBar(currentRoute: '/dashboard/doctors'),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF6366f1),
+            Color(0xFF8b5cf6),
+          ],
+        ),
+      ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: Row(
+                children: [
+                  // Icon and title
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.local_hospital,
+                      size: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Doctors',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'Manage doctor information',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white.withValues(alpha: 0.8),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Search button
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isSearchFilterVisible = !_isSearchFilterVisible;
+                          if (!_isSearchFilterVisible) {
+                            _searchQuery = '';
+                            _loadData(isRefresh: true);
+                          }
+                        });
+                      },
+                      icon: Icon(
+                        _isSearchFilterVisible ? Icons.close : Icons.search,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Filter button
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => DoctorFilterWidget(
+                            currentFilters: _filters,
+                            onFiltersChanged: _onFiltersChanged,
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.filter_list,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Add button
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Add doctor functionality coming soon'),
+                            backgroundColor: Colors.blue,
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Collapsible Search Section
+            if (_isSearchFilterVisible)
+              _buildSearchAndFilters(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchAndFilters() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: TextField(
+        onChanged: _onSearchChanged,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: 'Search by doctor name, specialty, or clinic...',
+          hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+          prefixIcon: Icon(Icons.search_rounded, color: Colors.white.withValues(alpha: 0.7)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.white),
+          ),
+          filled: true,
+          fillColor: Colors.white.withValues(alpha: 0.1),
+        ),
+      ),
     );
   }
 
@@ -281,37 +395,7 @@ class _DoctorsPageState extends State<DoctorsPage> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildSummaryCard(
-                  'Tier A',
-                  _summary!['tier_a_count'].toString(),
-                  const Color(0xFF059669),
-                  Icons.star,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildSummaryCard(
-                  'Tier B',
-                  _summary!['tier_b_count'].toString(),
-                  const Color(0xFFF59E0B),
-                  Icons.star_half,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildSummaryCard(
-                  'Tier C',
-                  _summary!['tier_c_count'].toString(),
-                  const Color(0xFFDC2626),
-                  Icons.star_border,
-                ),
-              ),
-            ],
-          ),
+
         ],
       ),
     );
@@ -356,25 +440,7 @@ class _DoctorsPageState extends State<DoctorsPage> {
     );
   }
   
-  Widget _buildSearchBar() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-      ),
-      child: TextField(
-        onChanged: _onSearchChanged,
-        decoration: const InputDecoration(
-          hintText: 'Search by doctor name, specialty, or clinic...',
-          prefixIcon: Icon(Icons.search, color: Color(0xFF6B7280)),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        ),
-      ),
-    );
-  }
+
   
   Widget _buildErrorMessage() {
     return Container(

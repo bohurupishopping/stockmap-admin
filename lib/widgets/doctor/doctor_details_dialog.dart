@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:geocoding/geocoding.dart';
 import '../../models/doctor_models.dart';
 import '../../services/doctor_service.dart';
 
@@ -39,6 +40,8 @@ class _DoctorDetailsDialogState extends State<DoctorDetailsDialog>
   List<MRVisitLog> _visitLogs = [];
   bool _isLoadingVisits = false;
   String? _visitError;
+  
+  final Map<String, String> _addressCache = {};
 
   @override
   void initState() {
@@ -84,7 +87,7 @@ class _DoctorDetailsDialogState extends State<DoctorDetailsDialog>
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.all(16.0),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 800, maxHeight: 700),
+        constraints: const BoxConstraints(maxWidth: 900, maxHeight: 800),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: Scaffold(
@@ -205,38 +208,16 @@ class _DoctorDetailsDialogState extends State<DoctorDetailsDialog>
 
   Widget _buildDetailsTab() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSection('Contact Information', [
-            if (widget.doctor.phoneNumber != null)
-              _buildDetailRow(Icons.phone_outlined, 'Phone', widget.doctor.phoneNumber!),
-            if (widget.doctor.email != null)
-              _buildDetailRow(Icons.email_outlined, 'Email', widget.doctor.email!),
-            if (widget.doctor.clinicAddress != null)
-              _buildDetailRow(Icons.location_on_outlined, 'Address', widget.doctor.clinicAddress!),
-          ]),
-          const SizedBox(height: 24),
-          _buildSection('Personal Information', [
-            if (widget.doctor.dateOfBirth != null)
-              _buildDetailRow(Icons.cake_outlined, 'Date of Birth', widget.dateFormat.format(widget.doctor.dateOfBirth!)),
-            if (widget.doctor.anniversaryDate != null)
-              _buildDetailRow(Icons.favorite_outline, 'Anniversary', widget.dateFormat.format(widget.doctor.anniversaryDate!)),
-          ]),
-          const SizedBox(height: 24),
-          _buildSection('Professional Information', [
-            _buildDetailRow(Icons.medical_services_outlined, 'Specialty', widget.doctor.specialty ?? 'N/A'),
-            _buildDetailRow(Icons.star_outline, 'Tier', widget.doctor.tier != null ? 'Tier ${widget.doctor.tier}' : 'N/A'),
-          ]),
-          const SizedBox(height: 24),
-          _buildSection('MR Assignment', [
-            _buildDetailRow(Icons.person_outline, 'Allotted MR', widget.doctor.allottedMR?.mrName ?? 'Not assigned'),
-          ]),
-          const SizedBox(height: 24),
+          // Compact grid layout for better space utilization
+          _buildCompactInfoGrid(),
+          const SizedBox(height: 20),
           _buildSection('System Information', [
-            _buildDetailRow(Icons.calendar_today_outlined, 'Created On', widget.dateFormat.format(widget.doctor.createdAt)),
-            _buildDetailRow(Icons.update_outlined, 'Last Updated', widget.dateFormat.format(widget.doctor.updatedAt)),
+            _buildDetailRow(Icons.calendar_today_outlined, 'Created', widget.dateFormat.format(widget.doctor.createdAt)),
+            _buildDetailRow(Icons.update_outlined, 'Updated', widget.dateFormat.format(widget.doctor.updatedAt)),
           ]),
         ],
       ),
@@ -278,18 +259,102 @@ class _DoctorDetailsDialogState extends State<DoctorDetailsDialog>
     );
   }
 
+  Widget _buildCompactInfoGrid() {
+    final items = <Widget>[];
+    
+    // Contact Information
+    if (widget.doctor.phoneNumber != null) {
+      items.add(_buildCompactInfoCard(Icons.phone_outlined, 'Phone', widget.doctor.phoneNumber!));
+    }
+    if (widget.doctor.email != null) {
+      items.add(_buildCompactInfoCard(Icons.email_outlined, 'Email', widget.doctor.email!));
+    }
+    if (widget.doctor.clinicAddress != null) {
+      items.add(_buildCompactInfoCard(Icons.location_on_outlined, 'Address', widget.doctor.clinicAddress!));
+    }
+    
+    // Professional Information
+    items.add(_buildCompactInfoCard(Icons.medical_services_outlined, 'Specialty', widget.doctor.specialty ?? 'N/A'));
+    if (widget.doctor.tier != null) {
+      items.add(_buildCompactInfoCard(Icons.star_outline, 'Tier', 'Tier ${widget.doctor.tier}'));
+    }
+    
+    // MR Assignment
+    items.add(_buildCompactInfoCard(Icons.person_outline, 'Allotted MR', widget.doctor.allottedMR?.mrName ?? 'Not assigned'));
+    
+    // Personal Information
+    if (widget.doctor.dateOfBirth != null) {
+      items.add(_buildCompactInfoCard(Icons.cake_outlined, 'Date of Birth', widget.dateFormat.format(widget.doctor.dateOfBirth!)));
+    }
+    if (widget.doctor.anniversaryDate != null) {
+      items.add(_buildCompactInfoCard(Icons.favorite_outline, 'Anniversary', widget.dateFormat.format(widget.doctor.anniversaryDate!)));
+    }
+    
+    return GridView.count(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      childAspectRatio: 2.5,
+      crossAxisSpacing: 12,
+      mainAxisSpacing: 12,
+      children: items,
+    );
+  }
+  
+  Widget _buildCompactInfoCard(IconData icon, String label, String value) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: _cardBgColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: _borderColor),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 16, color: _primaryColor),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: _labelColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: _textColor,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSection(String title, List<Widget> children) {
     if (children.isEmpty) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: _headingColor)),
-        const SizedBox(height: 16),
+        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: _headingColor)),
+        const SizedBox(height: 12),
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: _cardBgColor,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: _borderColor),
           ),
           child: Column(children: children),
@@ -300,20 +365,20 @@ class _DoctorDetailsDialogState extends State<DoctorDetailsDialog>
 
   Widget _buildDetailRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: _primaryColor),
-          const SizedBox(width: 16),
+          Icon(icon, size: 16, color: _primaryColor),
+          const SizedBox(width: 12),
           SizedBox(
-            width: 120,
-            child: Text(label, style: const TextStyle(fontSize: 14, color: _labelColor)),
+            width: 80,
+            child: Text(label, style: const TextStyle(fontSize: 13, color: _labelColor)),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: _textColor),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: _textColor),
             ),
           ),
         ],
@@ -354,24 +419,123 @@ class _DoctorDetailsDialogState extends State<DoctorDetailsDialog>
                   ),
               ],
             ),
-            if (clinic.latitude != null && clinic.longitude != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Row(
-                  children: [
-                    const Icon(Icons.location_on, size: 14, color: _labelColor),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${clinic.latitude!.toStringAsFixed(6)}, ${clinic.longitude!.toStringAsFixed(6)}',
-                      style: const TextStyle(fontSize: 12, color: _labelColor),
-                    ),
-                  ],
-                ),
-              ),
+            if (clinic.latitude != null && clinic.longitude != null) ...[
+              const SizedBox(height: 12),
+              _buildLocationInfo(clinic.latitude!, clinic.longitude!),
+            ],
           ],
         ),
       ),
     );
+  }
+  
+  Widget _buildLocationInfo(double latitude, double longitude) {
+    final coordKey = '${latitude.toStringAsFixed(6)},${longitude.toStringAsFixed(6)}';
+    
+    return FutureBuilder<String>(
+      future: _getAddressFromCoordinates(latitude, longitude, coordKey),
+      builder: (context, snapshot) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Coordinates row
+            Row(
+              children: [
+                const Icon(Icons.my_location, size: 14, color: _labelColor),
+                const SizedBox(width: 6),
+                Text(
+                  'Coordinates:',
+                  style: const TextStyle(fontSize: 12, color: _labelColor, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '${latitude.toStringAsFixed(6)}, ${longitude.toStringAsFixed(6)}',
+                    style: const TextStyle(fontSize: 12, color: _textColor),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            // Address row
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.location_on, size: 14, color: _labelColor),
+                const SizedBox(width: 6),
+                Text(
+                  'Address:',
+                  style: const TextStyle(fontSize: 12, color: _labelColor, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: snapshot.connectionState == ConnectionState.waiting
+                      ? Row(
+                          children: [
+                            SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(_primaryColor),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Loading address...',
+                              style: TextStyle(fontSize: 12, color: _labelColor, fontStyle: FontStyle.italic),
+                            ),
+                          ],
+                        )
+                      : Text(
+                          snapshot.data ?? 'Address not available',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: snapshot.hasError ? Colors.redAccent : _textColor,
+                            fontStyle: snapshot.hasError ? FontStyle.italic : FontStyle.normal,
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+  
+  Future<String> _getAddressFromCoordinates(double latitude, double longitude, String cacheKey) async {
+    // Check cache first
+    if (_addressCache.containsKey(cacheKey)) {
+      return _addressCache[cacheKey]!;
+    }
+    
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      if (placemarks.isNotEmpty) {
+        final placemark = placemarks.first;
+        final addressParts = [
+          if (placemark.street?.isNotEmpty == true) placemark.street,
+          if (placemark.subLocality?.isNotEmpty == true) placemark.subLocality,
+          if (placemark.locality?.isNotEmpty == true) placemark.locality,
+          if (placemark.administrativeArea?.isNotEmpty == true) placemark.administrativeArea,
+          if (placemark.postalCode?.isNotEmpty == true) placemark.postalCode,
+          if (placemark.country?.isNotEmpty == true) placemark.country,
+        ].where((part) => part != null && part.isNotEmpty).toList();
+        
+        final address = addressParts.join(', ');
+        _addressCache[cacheKey] = address;
+        return address;
+      }
+    } catch (e) {
+      final errorMsg = 'Unable to fetch address';
+      _addressCache[cacheKey] = errorMsg;
+      return errorMsg;
+    }
+    
+    final fallback = 'Address not available';
+    _addressCache[cacheKey] = fallback;
+    return fallback;
   }
 
   Widget _buildVisitCard(MRVisitLog visit) {
