@@ -95,6 +95,7 @@ class FooterNavBar extends StatelessWidget {
                 height: 52,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
+                  // ignore: deprecated_member_use
                   color: isActive ? item.color.withOpacity(0.1) : Colors.white,
                   border: Border.all(
                     color: isActive

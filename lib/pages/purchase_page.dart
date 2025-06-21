@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/purchase_models.dart';
 import '../services/purchase_service.dart';
-import '../widgets/purchase/purchase_summary_card.dart';
 import '../widgets/purchase/purchase_filter_widget.dart';
 import '../widgets/purchase/purchase_table_row.dart';
-import '../widgets/purchase/purchase_table_header.dart';
 import '../widgets/purchase/purchase_details_dialog.dart';
 import '../widgets/loading_overlay.dart';
 import '../widgets/footer_nav_bar.dart';
@@ -25,7 +23,7 @@ class _PurchasePageState extends State<PurchasePage> {
   final DateFormat _dateFormat = DateFormat('MMM dd, yyyy');
   
   List<PurchaseTransaction> _transactions = [];
-  PurchaseSummary? _summary;
+
   bool _isLoading = true;
   String? _error;
   bool _isSearchFilterVisible = false;
@@ -90,18 +88,12 @@ class _PurchasePageState extends State<PurchasePage> {
         limit: _itemsPerPage,
       );
       
-      final summary = await _purchaseService.getPurchaseSummary(
-        filters: _filters,
-      );
-      
-      
       setState(() {
         if (isRefresh || _currentPage == 1) {
           _transactions = transactions;
         } else {
           _transactions.addAll(transactions);
         }
-        _summary = summary;
         _hasMoreData = transactions.length == _itemsPerPage;
         _isLoading = false;
       });
@@ -165,33 +157,13 @@ class _PurchasePageState extends State<PurchasePage> {
                     child: _buildHeader(),
                   ),
                   
-                  // Summary Card
-                  if (_summary != null)
-                    SliverToBoxAdapter(
-                      child: PurchaseSummaryCard(
-                        summary: _summary!,
-                        currencyFormat: _currencyFormat,
-                        dateFormat: _dateFormat,
-                      ),
-                    ),
-                  
                   // Content
                   SliverToBoxAdapter(
                     child: _buildContent(),
                   ),
                   
-                  // Transaction Table
-                  if (_transactions.isNotEmpty) ...[
-                    // Table Header
-                    SliverToBoxAdapter(
-                      child: PurchaseTableHeader(
-                        sortField: _sortField,
-                        sortDirection: _sortDirection,
-                        onSort: _onSort,
-                      ),
-                    ),
-                    
-                    // Transaction List
+                  // Transaction List
+                  if (_transactions.isNotEmpty)
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
@@ -215,7 +187,6 @@ class _PurchasePageState extends State<PurchasePage> {
                         childCount: _transactions.length + (_hasMoreData ? 1 : 0),
                       ),
                     ),
-                  ],
                   
                   // Bottom spacing
                   const SliverToBoxAdapter(

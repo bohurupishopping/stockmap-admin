@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/sale_service.dart';
 import '../models/sale_models.dart';
-import '../widgets/sale/sale_summary_card.dart';
 import '../widgets/sale/sale_filter_widget.dart';
-import '../widgets/sale/sale_table_header.dart';
 import '../widgets/sale/sale_table_row.dart';
 import '../widgets/sale/sale_details_dialog.dart';
 import '../widgets/loading_overlay.dart';
@@ -24,7 +22,7 @@ class _SalePageState extends State<SalePage> {
   final DateFormat _dateFormat = DateFormat('MMM dd, yyyy');
   
   List<SaleTransaction> _transactions = [];
-  SaleSummary? _summary;
+
   SaleFilters? _filters;
   String _searchQuery = '';
   String _sortField = 'sale_date';
@@ -81,21 +79,12 @@ class _SalePageState extends State<SalePage> {
         sortDirection: _sortDirection,
       );
       
-      SaleSummary? summary;
-      if (_currentPage == 1) {
-        summary = await _saleService.getSaleSummary(
-          searchQuery: _searchQuery.isNotEmpty ? _searchQuery : null,
-          filters: _filters,
-        );
-      }
-      
       setState(() {
         if (_currentPage == 1) {
           _transactions = transactions;
         } else {
           _transactions.addAll(transactions);
         }
-        _summary = summary;
         _hasMoreData = transactions.length == _itemsPerPage;
         _isLoading = false;
       });
@@ -159,33 +148,13 @@ class _SalePageState extends State<SalePage> {
                     child: _buildHeader(),
                   ),
                   
-                  // Summary Card
-                  if (_summary != null)
-                    SliverToBoxAdapter(
-                      child: SaleSummaryCard(
-                        summary: _summary!,
-                        currencyFormat: _currencyFormat,
-                        dateFormat: _dateFormat,
-                      ),
-                    ),
-                  
                   // Content
                   SliverToBoxAdapter(
                     child: _buildContent(),
                   ),
                   
-                  // Transaction Table
-                  if (_transactions.isNotEmpty) ...[
-                    // Table Header
-                    SliverToBoxAdapter(
-                      child: SaleTableHeader(
-                        sortField: _sortField,
-                        sortDirection: _sortDirection,
-                        onSort: _onSort,
-                      ),
-                    ),
-                    
-                    // Transaction List
+                  // Transaction List
+                  if (_transactions.isNotEmpty)
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
@@ -209,7 +178,6 @@ class _SalePageState extends State<SalePage> {
                         childCount: _transactions.length + (_hasMoreData ? 1 : 0),
                       ),
                     ),
-                  ],
                   
                   // Bottom spacing
                   const SliverToBoxAdapter(
