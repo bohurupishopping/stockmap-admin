@@ -189,14 +189,8 @@ class _DashboardContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Quick Actions',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF334155),
-            ),
-          ),
+          
+         
           const SizedBox(height: 20),
           _buildNavGrid(context),
         ],
@@ -229,7 +223,8 @@ class _DashboardContent extends StatelessWidget {
           onTap: () {
             // Updated navigation logic for your specific routes.
             if (['/dashboard/stock', '/dashboard/report', '/dashboard/sale', '/dashboard/purchase', '/dashboard/ai',
-          '/dashboard/mr-sales', '/dashboard/mr_purchase' ]
+          '/dashboard/mr-sales', '/dashboard/mr_purchase', '/dashboard/doctors' ]
+
 
                 .contains(item.route)) {
               context.go(item.route);

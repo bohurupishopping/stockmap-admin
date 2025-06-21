@@ -209,7 +209,7 @@ class _DoctorsPageState extends State<DoctorsPage> {
               color: Color(0xFF1F2937),
             ),
             onPressed: () {
-              // TODO: Implement add doctor functionality
+             
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Add doctor functionality coming soon'),
