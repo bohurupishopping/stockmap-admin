@@ -46,6 +46,14 @@ class DashboardPage extends StatelessWidget {
       color: Color(0xFFf472b6),
       gradientColors: [Color(0xFFf472b6), Color(0xFFec4899)],
     ),
+    NavItem(
+      title: 'MR Sales',
+      description: 'View MR sales',
+      icon: Icons.assignment_outlined,
+      route: '/dashboard/mr-sales',
+      color: Color(0xFF8b5cf6),
+      gradientColors: [Color(0xFF8b5cf6), Color(0xFF7c3aed)],
+    ),
   ];
 
   @override
@@ -212,7 +220,9 @@ class _DashboardContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           onTap: () {
             // Updated navigation logic for your specific routes.
-            if (['/dashboard/stock', '/dashboard/report', '/dashboard/sale', '/dashboard/purchase', '/dashboard/ai']
+            if (['/dashboard/stock', '/dashboard/report', '/dashboard/sale', '/dashboard/purchase', '/dashboard/ai',
+          '/dashboard/mr-sales', '/dashboard/mr_purchase' ]
+
                 .contains(item.route)) {
               context.go(item.route);
             } else {
