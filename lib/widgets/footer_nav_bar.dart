@@ -37,6 +37,12 @@ class FooterNavBar extends StatelessWidget {
       route: '/dashboard/purchase',
       color: Color(0xFFf472b6),
     ),
+    NavItem(
+      title: 'Doctors',
+      icon: Icons.local_hospital,
+      route: '/dashboard/doctors',
+      color: Color(0xFF06b6d4),
+    ),
   ];
 
   @override

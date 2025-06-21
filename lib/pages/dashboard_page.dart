@@ -54,6 +54,14 @@ class DashboardPage extends StatelessWidget {
       color: Color(0xFF8b5cf6),
       gradientColors: [Color(0xFF8b5cf6), Color(0xFF7c3aed)],
     ),
+    NavItem(
+      title: 'Doctors',
+      description: 'Manage doctors',
+      icon: Icons.local_hospital_outlined,
+      route: '/dashboard/doctors',
+      color: Color(0xFF06b6d4),
+      gradientColors: [Color(0xFF06b6d4), Color(0xFF0891b2)],
+    ),
   ];
 
   @override
